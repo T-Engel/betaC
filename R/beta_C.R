@@ -1,0 +1,146 @@
+#' Calculate sample coverage
+#'
+#' Sample coverage is calculated according to Chao & Jost (2012).
+#'
+#' @param m site by species matrix
+#'
+#' @return a vector
+#' @export
+#'
+#' @examples
+#' library(vegan)
+#' data(BCI)
+#' coverage(BCI)
+coverage<-function(m){
+  if (is.null(dim(m))) m= matrix(m, ncol=length(m))
+  n<-apply(m,1, sum)
+  f1<-apply(m,1,function(x)length(x[x==1]))
+  f2<-apply(m,1,function(x)length(x[x==2]))
+  cover=1-(f1/n)*(((n-1)*f1)/((n-1)*f1+2*f2))
+  return(cover)
+}
+
+
+#' C_hat calculate expected sample coverage
+#'
+#' Returns expected sample coverage  of a sample x for a smaller than observed sample size m (Chao & Jost, 2012).
+#' This code was copied from INEXT's internal function Chat.Ind() (Hsieh et al 2016).
+#'
+#' @param x integer vector (species abundances)
+#' @param m integer. (smaller than observed sample size)
+#'
+#' @return
+#' @export
+#'
+#' @examples
+Chat = function (x, m)
+{
+  x <- x[x > 0]
+  n <- sum(x)
+  f1 <- sum(x == 1)
+  f2 <- sum(x == 2)
+  f0.hat <- ifelse(f2 == 0, (n - 1)/n * f1 * (f1 - 1)/2, (n -
+                                                            1)/n * f1^2/2/f2)
+  A <- ifelse(f1 > 0, n * f0.hat/(n * f0.hat + f1), 1)
+  Sub <- function(m) {
+    if (m < n) {
+      xx <- x[(n - x) >= m]
+      out <- 1 - sum(xx/n * exp(lgamma(n - xx + 1) - lgamma(n -
+                                                              xx - m + 1) - lgamma(n) + lgamma(n - m)))
+    }
+    if (m == n)
+      out <- 1 - f1/n * A
+    if (m > n)
+      out <- 1 - f1/n * A^(m - n + 1)
+    out
+  }
+  sapply(m, Sub)
+}
+
+#' Number of individuals corresponding to a desired coverage
+#'
+#' If you wanted to resample a vector to a certain expected sample coverage, how many individuals would you have to draw?
+#' This is C_hat solved for the number of individuals. This code is a modification INEXT's internal function invChat.Ind() (Hsieh et al 2016).
+#'
+#' @param x integer vector.
+#' @param C numeric. between 0 and 1
+#'
+#' @return
+#' @export
+#'
+Nexp_C<- function (x, C)
+{
+  m <- NULL
+  n <- sum(x)
+  refC <- Chat(x, n)
+  f <- function(m, C) abs(Chat(x, m) - C)
+  # for interpolation
+  if (refC > C) {
+    opt <- optimize(f, C = C, lower = 0, upper = sum(x))
+    mm <- opt$minimum
+  }
+  # for extrapolation
+  if (refC <= C) {
+    f1 <- sum(x == 1)
+    f2 <- sum(x == 2)
+    if (f1 > 0 & f2 > 0) {
+      A <- (n - 1) * f1/((n - 1) * f1 + 2 * f2)
+    }
+    if (f1 > 1 & f2 == 0) {
+      A <- (n - 1) * (f1 - 1)/((n - 1) * (f1 - 1) + 2)
+    }
+    if (f1 == 1 & f2 == 0) {
+      A <- 1
+    }
+    if (f1 == 0 & f2 == 0) {
+      A <- 1
+    }
+    mm <- (log(n/f1) + log(1 - C))/log(A) - 1
+    mm <- n + mm
+
+  }
+  if (mm > 2 * n)
+    warning("The maximum size of the extrapolation exceeds double reference sample size, the results for q = 0 may be subject to large prediction bias.")
+  return(mm)
+}
+
+
+#' Calculate beta_C
+#'
+#' Uses individual-based rarefaction to quantify the non-random component in beta-diversity.
+#' The partitioning is done at the number of individuals that corresponds to a sample coverage of C.
+#'
+#' @param x a site by species matrix
+#' @param C target coverage. value between 0 and 1.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+beta_C<-function(x, C){
+  x<-as.matrix(x)
+  total<-colSums(x)
+  gamma_value=as.numeric(vegan::rarefy(total, round(Nexp_C(total,C))))
+  alpha_value=mean(vegan::rarefy(x,round(Nexp_C(total, C))))
+  beta=gamma_value/alpha_value
+  return(beta)
+
+}
+
+#' Calculate the recommended maximum coverage value for a site by species matrix
+#'
+#' This returns the coverage of x at the gamma scale that corresponds to the smalles observed sample size at the alpha scale.
+#' @param x
+#'
+#' @return
+#' @export
+#'
+#' @examples
+C_target<-function(x){
+  x <- as.matrix(x)
+  n=min(rowSums(x))
+  out<- Chat(x,n)
+  return(out)
+  }
+
+
