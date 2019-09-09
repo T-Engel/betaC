@@ -1,9 +1,9 @@
 
 # betaC
 
-The goal ofthe r package “betaC” is to provide code for the calculation
-of beta\_C, a metric to quantify the non-random component in
-beta-diversity.
+The r package “betaC” provides code for the calculation of beta\_C, a
+metric to quantify the non-random component in beta-diversity for a
+given coverage.
 
 ## Installation
 
@@ -42,16 +42,15 @@ beta_C_BCI
 #> [1] 1.088571
 ```
 
-The samples have a beta-diversity of `round(r beta_BCI,2)` but most of
-this differention is due to a sampling effect. If we standardize to the
-number if individuals that corresponds to 50 % coverage at the gamma
-scale we find that the partition of the non-random component in
-beta-diversity is only ca 1.09
+The samples have a beta-diversity of 2.48 but most of this differention
+is due to a sampling effect. If we standardize to the number if
+individuals that corresponds to 50 % coverage at the gamma scale we find
+that the partition of the non-random component in beta-diversity is only
+ca 1.09
 
 To illustrate this let’s have a look at the rarefaction curves
 
 ``` r
-# a function to draw nice rarefaction curves
 library(tidyverse)
 #> -- Attaching packages ------------------------------------------------------------------------- tidyverse 1.2.1 --
 #> v ggplot2 3.1.1       v purrr   0.3.2  
@@ -61,41 +60,9 @@ library(tidyverse)
 #> -- Conflicts ---------------------------------------------------------------------------- tidyverse_conflicts() --
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
-rarefy_long <- function(x) {
-  if(is.matrix(x)==F) x=matrix(x,nrow = 1, byrow =T, dimnames= list("x", names(x)))
-    alphas <-
-        lapply(row.names(x), function(i)
-            return(as.numeric(vegan::rarefy(
-                x[i, ], sample = 1:sum(x[i, ])
-            )))) %>%
-        lapply(function(x)
-            return(data.frame(
-                S_n = as.numeric(x), N = 1:length(x)
-            )))
-    names(alphas) <- rownames(x)
-    alphas <- alphas %>% plyr::ldply(.id = "Curve")
-    alphas$type = "minor"
-    mean_alpha <-
-        data.frame(
-            Curve = "mean_alpha",
-            S_n = colMeans(as.matrix(vegan::rarefy(
-                x, 1:min(rowSums(x))
-            ))),
-            N = 1:min(rowSums(x)),
-            type = "major"
-        )
-    gamma <-
-        data.frame(
-            Curve = "gamma",
-            S_n = as.numeric(vegan::rarefy(colSums(x), 1:sum(x))),
-            N = 1:sum(x),
-            type = "major"
-        )
-    out = alphas %>% full_join(mean_alpha, by = c("Curve", "S_n", "N",  "type")) %>% full_join(gamma, by = c("Curve", "S_n", "N", "type"))
-    
-}
 
-dat<-rarefy_long(as.matrix(BCI))
+# calculate rarefaction curves
+dat<-betaC:::rarefy_long(as.matrix(BCI))
 #> Warning: Column `Curve` joining factors with different levels, coercing to
 #> character vector
 #> Warning: Column `type` joining character vector and factor, coercing into
@@ -105,8 +72,16 @@ dat<-rarefy_long(as.matrix(BCI))
 #> Warning: Column `type` joining character vector and factor, coercing into
 #> character vector
 
+# plot them
 dat %>% filter(type== "major") %>% ggplot(aes(N,S_n, col= Curve))+ geom_line(size=1.5)+ geom_hline(yintercept =  alpha)+
-geom_hline(yintercept =  gamma)
+geom_hline(yintercept =  gamma)+ geom_vline(xintercept =  invChat(colSums(BCI), 0.5), linetype= "dashed")
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+
+The horizontal black lines indicate the observed species richness at
+alpha and gamma scales. The rarefaction curves fall very closely on top
+of each other indicating that there is not a strong signal of spatial
+structure. The observed beta-diversity is mostly caused by difference in
+sample size. Beta\_C of 50% is calculated at a sample size of 40
+individuals (dashed vertical line).
