@@ -8,15 +8,26 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' library(vegan)
 #' data(BCI)
+#'
+#' # at the alpha scale
 #' coverage(BCI)
-coverage<-function(m){
-  if (is.null(dim(m))) m= matrix(m, ncol=length(m))
-  n<-apply(m,1, sum)
-  f1<-apply(m,1,function(x)length(x[x==1]))
-  f2<-apply(m,1,function(x)length(x[x==2]))
-  cover=1-(f1/n)*(((n-1)*f1)/((n-1)*f1+2*f2))
+#'
+#' # at the gamma scale
+#' coverage(colSums(BCI))
+#' }
+#'
+coverage <- function(m) {
+  if (is.null(dim(m)))
+    m = matrix(m, ncol = length(m))
+  n <- apply(m, 1, sum)
+  f1 <- apply(m, 1, function(x)
+    length(x[x == 1]))
+  f2 <- apply(m, 1, function(x)
+    length(x[x == 2]))
+  cover = 1 - (f1 / n) * (((n - 1) * f1) / ((n - 1) * f1 + 2 * f2))
   return(cover)
 }
 
@@ -29,29 +40,39 @@ coverage<-function(m){
 #' @param x integer vector (species abundances)
 #' @param m integer. (smaller than observed sample size)
 #'
-#' @return
+#' @return a numeric value.
 #' @export
 #'
 #' @examples
-Chat = function (x, m)
+#' \donttest{
+#' library(vegan)
+#' data(BCI)
+#'
+#' # What is the expected coverage corresponding to a sample size of 50 at the gamma scale?
+#' Chat(colSums(BCI), 50)
+#' }
+Chat <- function (x, m)
 {
   x <- x[x > 0]
   n <- sum(x)
   f1 <- sum(x == 1)
   f2 <- sum(x == 2)
-  f0.hat <- ifelse(f2 == 0, (n - 1)/n * f1 * (f1 - 1)/2, (n -
-                                                            1)/n * f1^2/2/f2)
-  A <- ifelse(f1 > 0, n * f0.hat/(n * f0.hat + f1), 1)
+  f0.hat <- ifelse(f2 == 0, (n - 1) / n * f1 * (f1 - 1) / 2, (n -
+                                                                1) / n * f1 ^
+                     2 / 2 / f2)
+  A <- ifelse(f1 > 0, n * f0.hat / (n * f0.hat + f1), 1)
   Sub <- function(m) {
     if (m < n) {
       xx <- x[(n - x) >= m]
-      out <- 1 - sum(xx/n * exp(lgamma(n - xx + 1) - lgamma(n -
-                                                              xx - m + 1) - lgamma(n) + lgamma(n - m)))
+      out <- 1 - sum(xx / n * exp(
+        lgamma(n - xx + 1) - lgamma(n -
+                                      xx - m + 1) - lgamma(n) + lgamma(n - m)
+      ))
     }
     if (m == n)
-      out <- 1 - f1/n * A
+      out <- 1 - f1 / n * A
     if (m > n)
-      out <- 1 - f1/n * A^(m - n + 1)
+      out <- 1 - f1 / n * A ^ (m - n + 1)
     out
   }
   sapply(m, Sub)
@@ -65,18 +86,30 @@ Chat = function (x, m)
 #' @param x integer vector.
 #' @param C numeric. between 0 and 1
 #'
-#' @return
+#' @return a numeric value
 #' @export
+#' @examples
+#' \donttest{
+#' library(vegan)
+#' data(BCI)
 #'
-Nexp_C<- function (x, C)
+#' # What sample size corresponds to an expected sample coverage of 55%?
+#' invChat(colSums(BCI), 0.55)
+#' }
+#'
+invChat <- function (x, C)
 {
   m <- NULL
   n <- sum(x)
   refC <- Chat(x, n)
-  f <- function(m, C) abs(Chat(x, m) - C)
+  f <- function(m, C)
+    abs(Chat(x, m) - C)
   # for interpolation
   if (refC > C) {
-    opt <- optimize(f, C = C, lower = 0, upper = sum(x))
+    opt <- optimize(f,
+                    C = C,
+                    lower = 0,
+                    upper = sum(x))
     mm <- opt$minimum
   }
   # for extrapolation
@@ -84,10 +117,10 @@ Nexp_C<- function (x, C)
     f1 <- sum(x == 1)
     f2 <- sum(x == 2)
     if (f1 > 0 & f2 > 0) {
-      A <- (n - 1) * f1/((n - 1) * f1 + 2 * f2)
+      A <- (n - 1) * f1 / ((n - 1) * f1 + 2 * f2)
     }
     if (f1 > 1 & f2 == 0) {
-      A <- (n - 1) * (f1 - 1)/((n - 1) * (f1 - 1) + 2)
+      A <- (n - 1) * (f1 - 1) / ((n - 1) * (f1 - 1) + 2)
     }
     if (f1 == 1 & f2 == 0) {
       A <- 1
@@ -95,52 +128,67 @@ Nexp_C<- function (x, C)
     if (f1 == 0 & f2 == 0) {
       A <- 1
     }
-    mm <- (log(n/f1) + log(1 - C))/log(A) - 1
+    mm <- (log(n / f1) + log(1 - C)) / log(A) - 1
     mm <- n + mm
 
   }
   if (mm > 2 * n)
-    warning("The maximum size of the extrapolation exceeds double reference sample size, the results for q = 0 may be subject to large prediction bias.")
+    warning(
+      "The maximum size of the extrapolation exceeds double reference sample size, the results for q = 0 may be subject to large prediction bias."
+    )
   return(mm)
 }
 
 
 #' Calculate beta_C
 #'
-#' Uses individual-based rarefaction to quantify the non-random component in beta-diversity.
-#' The partitioning is done at the number of individuals that corresponds to a sample coverage of C.
+#' Beta_C uses individual-based rarefaction to quantify the non-random component in beta-diversity.
+#' The partitioning is done at the number of individuals that corresponds to a sample coverage of C at the gamma scale.
 #'
 #' @param x a site by species matrix
 #' @param C target coverage. value between 0 and 1.
 #'
-#' @return
+#' @return a numeric value
 #' @export
 #'
 #' @examples
-beta_C<-function(x, C){
-  x<-as.matrix(x)
-  total<-colSums(x)
-  gamma_value=as.numeric(vegan::rarefy(total, round(Nexp_C(total,C))))
-  alpha_value=mean(vegan::rarefy(x,round(Nexp_C(total, C))))
-  beta=gamma_value/alpha_value
+#' \donttest{
+#' library(vegan)
+#' data(BCI)
+#'
+#' # What is beta_C for a coverage value of 60%?
+#' beta_C(BCI, 0.6)
+#' }
+beta_C <- function(x, C) {
+  x <- as.matrix(x)
+  total <- colSums(x)
+  gamma_value = as.numeric(vegan::rarefy(total, round(invChat(total, C))))
+  alpha_value = mean(vegan::rarefy(x, round(invChat(total, C))))
+  beta = gamma_value / alpha_value
   return(beta)
 
 }
 
-#' Calculate the recommended maximum coverage value for a site by species matrix
+#' Calculate the recommended maximum coverage value for the computation of beta_C from a site by species matrix
 #'
 #' This returns the coverage of x at the gamma scale that corresponds to the smalles observed sample size at the alpha scale.
 #' @param x
 #'
-#' @return
+#' @return numeric value
 #' @export
 #'
 #' @examples
-C_target<-function(x){
+#' \donttest{
+#' library(vegan)
+#' data(BCI)
+#'
+#' # What is the largest possible C that I can use to calculate beta_C for my site by species matrix?
+#' C_target(BCI)
+#' }
+C_target <- function(x) {
   x <- as.matrix(x)
-  n=min(rowSums(x))
-  out<- Chat(x,n)
+  n = min(rowSums(x))
+  out <- Chat(colSums(x), n)
   return(out)
-  }
-
+}
 
