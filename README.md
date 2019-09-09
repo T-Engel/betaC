@@ -98,3 +98,4 @@ Furthermore, there is a function that helps to determine the target
 coverage value:
 
   - `C_target`
+
