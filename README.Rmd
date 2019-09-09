@@ -7,7 +7,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "150%"
 )
 ```
 # betaC
@@ -22,7 +22,7 @@ You can install the development version of betaC from [GitHub](https://github.co
 devtools::install_github("T-Engel/betaC")
 ```
 
-Please, also install the package "vegan" from CRAN.
+Please, also install the package "vegan" from CRAN. Furthermore, "tidyverse" is recommended but the main functions will work without it. 
 
 ## Example: Beta-diversity of the BCI dataset from vegan
 
@@ -48,7 +48,7 @@ The samples have a beta-diversity of `r round(beta_BCI,2)` but most of this diff
 
 To illustrate this let's have a look at the rarefaction curves
 
-```{r}
+```{r  message=FALSE, warning=FALSE}
 library(tidyverse)
 
 # calculate rarefaction curves

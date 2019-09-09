@@ -14,7 +14,9 @@ You can install the development version of betaC from
 devtools::install_github("T-Engel/betaC")
 ```
 
-Please, also install the package “vegan” from CRAN.
+Please, also install the package “vegan” from CRAN. Furthermore,
+“tidyverse” is recommended but the main functions will work without
+it.
 
 ## Example: Beta-diversity of the BCI dataset from vegan
 
@@ -52,32 +54,16 @@ To illustrate this let’s have a look at the rarefaction curves
 
 ``` r
 library(tidyverse)
-#> -- Attaching packages ------------------------------------------------------------------------- tidyverse 1.2.1 --
-#> v ggplot2 3.1.1       v purrr   0.3.2  
-#> v tibble  2.1.1       v dplyr   0.8.0.1
-#> v tidyr   0.8.3       v stringr 1.4.0  
-#> v readr   1.3.1       v forcats 0.4.0
-#> -- Conflicts ---------------------------------------------------------------------------- tidyverse_conflicts() --
-#> x dplyr::filter() masks stats::filter()
-#> x dplyr::lag()    masks stats::lag()
 
 # calculate rarefaction curves
 dat<-betaC:::rarefy_long(as.matrix(BCI))
-#> Warning: Column `Curve` joining factors with different levels, coercing to
-#> character vector
-#> Warning: Column `type` joining character vector and factor, coercing into
-#> character vector
-#> Warning: Column `Curve` joining character vector and factor, coercing into
-#> character vector
-#> Warning: Column `type` joining character vector and factor, coercing into
-#> character vector
 
 # plot them
 dat %>% filter(type== "major") %>% ggplot(aes(N,S_n, col= Curve))+ geom_line(size=1.5)+ geom_hline(yintercept =  alpha)+
 geom_hline(yintercept =  gamma)+ geom_vline(xintercept =  invChat(colSums(BCI), 0.5), linetype= "dashed")
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="150%" />
 
 The horizontal black lines indicate the observed species richness at
 alpha and gamma scales. The rarefaction curves fall very closely on top
@@ -98,4 +84,3 @@ Furthermore, there is a function that helps to determine the target
 coverage value:
 
   - `C_target`
-
