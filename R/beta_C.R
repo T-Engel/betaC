@@ -32,7 +32,7 @@ coverage <- function(m) {
 }
 
 
-#' C_hat calculate expected sample coverage
+#' Calculate expected sample coverage C_hat
 #'
 #' Returns expected sample coverage  of a sample x for a smaller than observed sample size m (Chao & Jost, 2012).
 #' This code was copied from INEXT's internal function Chat.Ind() (Hsieh et al 2016).
@@ -78,7 +78,7 @@ Chat <- function (x, m)
   sapply(m, Sub)
 }
 
-#' Number of individuals corresponding to a desired coverage
+#' Number of individuals corresponding to a desired coverage (inverse C_hat)
 #'
 #' If you wanted to resample a vector to a certain expected sample coverage, how many individuals would you have to draw?
 #' This is C_hat solved for the number of individuals. This code is a modification INEXT's internal function invChat.Ind() (Hsieh et al 2016).

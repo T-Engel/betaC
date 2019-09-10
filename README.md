@@ -61,7 +61,7 @@ library(tidyverse)
 dat<-betaC:::rarefy_long(as.matrix(BCI))
 
 # plot them
-dat %>% filter(type== "major") %>% ggplot(aes(N,S_n, col= Curve))+ geom_line(size=1.5)+ geom_hline(yintercept =  alpha)+
+dat %>% filter(type== "major") %>% ggplot(aes(N,S_n, col= Curve))+ geom_line(size=1)+ geom_hline(yintercept =  alpha)+
 geom_hline(yintercept =  gamma)+ geom_vline(xintercept =  invChat(colSums(BCI), 0.5), linetype= "dashed")
 ```
 
@@ -100,7 +100,7 @@ And here are the plots:
 ``` r
 
 N_plot <-
-    BCI_curve %>% ggplot(aes(N, beta_Sn)) + geom_line(size = 1.5) + geom_rug() +
+    BCI_curve %>% ggplot(aes(N, beta_Sn)) + geom_line(size = 1) + geom_rug() +
     geom_hline(yintercept = beta_C_BCI,
                col = "red",
                linetype = "dotted") + geom_vline(
@@ -109,7 +109,7 @@ N_plot <-
                    linetype = "dotted"
                )
 C_plot <-
-    BCI_curve %>% ggplot(aes(C, beta_Sn)) + geom_line(size = 1.5) + geom_rug() +
+    BCI_curve %>% ggplot(aes(C, beta_Sn)) + geom_line(size = 1) + geom_rug() +
     geom_hline(yintercept = beta_C_BCI,
                col = "red",
                linetype = "dotted") + geom_vline(
