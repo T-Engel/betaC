@@ -142,7 +142,7 @@ invChat <- function (x, C)
 
 #' Calculate beta_C
 #'
-#' Beta_C uses individual-based rarefaction to quantify the non-random component in beta-diversity.
+#' Beta_C uses coverage-based rarefaction to quantify the non-random component in beta-diversity.
 #' The partitioning is done at the number of individuals that corresponds to a sample coverage of C at the gamma scale.
 #'
 #' @param x a site by species matrix
