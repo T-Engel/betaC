@@ -61,6 +61,25 @@ geom_hline(yintercept =  gamma)+ geom_vline(xintercept =  invChat(colSums(BCI), 
 
 The horizontal black lines indicate the observed species richness at alpha and gamma scales. The rarefaction curves fall very closely on top of each other indicating that there is not a strong signal of spatial structure. The observed beta-diversity is mostly caused by difference in sample size. Beta_C of 50% is calculated at a sample size of `r round(invChat(colSums(BCI), 0.5))` individuals (dashed vertical line).
 
+We can also examine the entire scaling relationship of the nonrandom component in beta-diversity. To do that we calculate beta_Sn for every N and the corresponding coverages at the gamma scale. This can be done using `beta_C_curve`. 
+
+```{r}
+BCI_curve<-beta_C_curve(BCI)
+
+head(BCI_curve)
+```
+
+And here are the plots:
+
+```{r}
+N_plot<-BCI_curve %>% ggplot(aes(N, beta_Sn))+geom_line( size= 1.5 )+geom_rug()
+C_plot<-BCI_curve %>% ggplot(aes(C, beta_Sn))+geom_line( size= 1.5)+geom_rug()
+N_plot
+C_plot
+```
+
+Both graphs show the same data on the y axis. 
+
 ## Functions
 The main function `beta_C` uses the following  helper functions to jump between sample size and coverage. Both have been adapted from iNEXT.
 

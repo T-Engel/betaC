@@ -72,6 +72,44 @@ structure. The observed beta-diversity is mostly caused by difference in
 sample size. Beta\_C of 50% is calculated at a sample size of 40
 individuals (dashed vertical line).
 
+We can also examine the entire scaling relationship of the nonrandom
+component in beta-diversity. To do that we calculate beta\_Sn for every
+N and the corresponding coverages at the gamma scale. This can be done
+using `beta_C_curve`.
+
+``` r
+BCI_curve<-beta_C_curve(BCI)
+
+head(BCI_curve)
+#> # A tibble: 6 x 3
+#>       N      C beta_Sn
+#>   <int>  <dbl>   <dbl>
+#> 1     1 0.0263    1.  
+#> 2     2 0.0512    1.01
+#> 3     3 0.0748    1.01
+#> 4     4 0.0973    1.02
+#> 5     5 0.119     1.02
+#> 6     6 0.139     1.03
+```
+
+And here are the plots:
+
+``` r
+N_plot<-BCI_curve %>% ggplot(aes(N, beta_Sn))+geom_line( size= 1.5 )+geom_rug()
+C_plot<-BCI_curve %>% ggplot(aes(C, beta_Sn))+geom_line( size= 1.5)+geom_rug()
+N_plot
+```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="150%" />
+
+``` r
+C_plot
+```
+
+<img src="man/figures/README-unnamed-chunk-4-2.png" width="150%" />
+
+Both graphs show the same data on the y axis.
+
 ## Functions
 
 The main function `beta_C` uses the following helper functions to jump

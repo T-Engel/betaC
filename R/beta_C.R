@@ -192,3 +192,47 @@ C_target <- function(x) {
   return(out)
 }
 
+#' Calculate beta_Sn
+#'
+#' @param x a site by species matrix
+#' @param N an integer value
+#'
+#' @return a numeric value
+#' @export
+#'
+#' @examples
+beta_SN<-function(x, N){
+  x<-as.matrix(x)
+  total<-colSums(x)
+  gamma_value=vegan::rarefy(total,N )
+  alpha_value=mean(vegan::rarefy(x, N))
+  beta=gamma_value/alpha_value
+  return(beta)
+
+}
+
+
+#' Calculate beta_C/ beta_Sn curve
+#'
+#' @param x a site by species matrix
+#'
+#' @return a tibble
+#' @export
+#'
+#' @examples
+beta_C_curve<-function(x){
+  require(tidyverse)
+  if(length(dim(x))!=2) stop("x should be a site by species matrix.")
+  x= as.matrix(x)
+
+
+  dat=tibble(N=1:min(rowSums(x)),
+              C=map_dbl(N,function(N) Chat(colSums(x), N)),
+              beta_Sn = map_dbl(N,function(N)beta_SN(x, N)))
+
+
+  return(dat)
+}
+
+
+
