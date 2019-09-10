@@ -21,7 +21,9 @@ it.
 ## Example: Beta-diversity of the BCI dataset from vegan
 
 Let’s look at the beta\_diversity of the BCI dataset that comes with the
-package vegan.
+package vegan. First we calculate Whittaker’s multiplicative
+beta-diverity and than we standardize it to a sample coverage of 50%
+using `beta_C`.
 
 ``` r
 library(betaC)
@@ -44,13 +46,13 @@ beta_C_BCI
 #> [1] 1.088571
 ```
 
-The samples have a beta-diversity of 2.48 but most of this differention
-is due to a sampling effect. If we standardize to the number if
-individuals that corresponds to 50 % coverage at the gamma scale we find
-that the partition of the non-random component in beta-diversity is only
-ca 1.09
+The samples have a beta-diversity of 2.48 but most of this sample
+differention is due to a sampling effect. If we standardize to the
+number of individuals that corresponds to 50 % coverage at the gamma
+scale we find that the partition of the non-random component in
+beta-diversity is only ca. 1.09
 
-To illustrate this let’s have a look at the rarefaction curves
+To illustrate this let’s have a look at the two-scale rarefaction curve.
 
 ``` r
 library(tidyverse)
@@ -72,10 +74,11 @@ structure. The observed beta-diversity is mostly caused by difference in
 sample size. Beta\_C of 50% is calculated at a sample size of 40
 individuals (dashed vertical line).
 
-We can also examine the entire scaling relationship of the nonrandom
-component in beta-diversity. To do that we calculate beta\_Sn for every
-N and the corresponding coverages at the gamma scale. This can be done
-using `beta_C_curve`.
+For this example we chose the 50% arbitrarily. We can also examine the
+entire scaling relationship of the nonrandom component in
+beta-diversity. To do that we calculate beta\_Sn for every N and the
+corresponding coverages at the gamma scale. This can be done using
+`beta_C_curve`.
 
 ``` r
 BCI_curve<-beta_C_curve(BCI)
@@ -95,20 +98,36 @@ head(BCI_curve)
 And here are the plots:
 
 ``` r
-N_plot<-BCI_curve %>% ggplot(aes(N, beta_Sn))+geom_line( size= 1.5 )+geom_rug()
-C_plot<-BCI_curve %>% ggplot(aes(C, beta_Sn))+geom_line( size= 1.5)+geom_rug()
-N_plot
+
+N_plot <-
+    BCI_curve %>% ggplot(aes(N, beta_Sn)) + geom_line(size = 1.5) + geom_rug() +
+    geom_hline(yintercept = beta_C_BCI,
+               col = "red",
+               linetype = "dotted") + geom_vline(
+                   xintercept = invChat(colSums(BCI), 0.5),
+                   col = "red",
+                   linetype = "dotted"
+               )
+C_plot <-
+    BCI_curve %>% ggplot(aes(C, beta_Sn)) + geom_line(size = 1.5) + geom_rug() +
+    geom_hline(yintercept = beta_C_BCI,
+               col = "red",
+               linetype = "dotted") + geom_vline(
+                   xintercept =  0.5,
+                   col = "red",
+                   linetype = "dotted"
+               )
+plot_grid(N_plot, C_plot, align = "v")
 ```
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="150%" />
 
-``` r
-C_plot
-```
-
-<img src="man/figures/README-unnamed-chunk-4-2.png" width="150%" />
-
-Both graphs show the same data on the y axis.
+Note that both graphs show the same data on the y axis. The value
+corresponding to 50% that we calculated previously is indicated by the
+dotted red lines. The coverage/ sample size value used for the
+standarisation stronly influences the value of beta\_C. Therefore it
+should always be reported and compared with respect to the underlying
+coverage.
 
 ## Functions
 
