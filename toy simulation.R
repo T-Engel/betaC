@@ -48,3 +48,41 @@ both_curves %>%  ggplot(aes(N, beta_Sn, col= scenario)) + geom_line(size = 1) + 
 both_curves %>%  ggplot(aes(C, beta_Sn, col= scenario)) + geom_line(size = 1) + geom_rug()
 
 
+
+
+######
+
+
+# Kraft null model
+
+# beta_true= function(x, transformation= F){
+#     alpha= mean(vegan::specnumber(x))
+#     gamma=vegan::specnumber(colSums(x))
+#     beta =gamma/alpha
+#     if(transformation) beta= 1-(1/beta)
+#     return(beta)
+# }
+#
+# null_model<-function(x, permutations, func=beta_true,...){
+#     x=as.matrix(x)
+#     observed=match.fun(func)(x, ...)
+#     null=sapply(1:permutations, function(i) {
+#         n=rowSums(x)
+#         gamma=colSums(x)
+#         random<-tibble(species=sample(rep(1:length(gamma), gamma)),site=rep(1:length(n), n)) %>%
+#             group_by(species, site) %>%
+#             count %>%
+#             spread(key=species, value= n, fill= 0) %>% column_to_rownames("site") %>%
+#             as.matrix()
+#         return(match.fun(func)(random,...))
+#     })
+#
+#     mean_null=mean(null)
+#     sd_null= sd(null)
+#     beta_dev=(observed-mean_null)/sd_null
+#     return(beta_dev)
+# }
+#
+# beta_dev_high<-null_model(samples_high, 500)
+#
+# beta_dev_low<-null_model(samples_low, 500)
