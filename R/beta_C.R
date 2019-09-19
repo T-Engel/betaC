@@ -212,6 +212,25 @@ beta_SN<-function(x, N){
 }
 
 
+#' Calculate Beta diversity
+#'
+#' @param x
+#' @param transformation
+#'
+#' @return
+#' @export
+#'
+#' @examples
+beta_true= function(x, transformation= F){
+    x= as.matrix(x)
+    alpha= mean(vegan::specnumber(x))
+    gamma=vegan::specnumber(colSums(x))
+    beta =gamma/alpha
+    if(transformation) beta= 1-(1/beta)
+    return(beta)
+}
+
+
 #' Calculate beta_C/ beta_Sn curve
 #'
 #' @param x a site by species matrix
