@@ -4,35 +4,38 @@
 \alias{beta_stand}
 \title{Calculate pairwise/ setwise beta diversities}
 \usage{
-beta_stand(x, func = list("beta_true", "beta_SN"), setsize = 2,
-  summarise = T, resamples = 1000, max_combn = 1000, verbose = T,
-  args)
+beta_stand(x, setsize = 2, func = list("beta_true"), args = NULL,
+  summarise = T, max_combn = 10000, resamples = 1000, verbose = T)
 }
 \arguments{
 \item{x}{A site by species matrix.}
 
 \item{setsize}{Number of samples per subset.}
 
+\item{func}{a list of function names to be used for the metric calculation}
+
+\item{args}{a list of additional arguments to be passed on to the functions in func}
+
 \item{summarise}{Return mean and variance of all betas?}
 
-\item{resamples}{Number of samples used if possible combinations exceeds max_combn}
+\item{max_combn}{Number of combinations allowed before resampling is used instead}
 
-\item{max_combn}{Number of combinations allowed before resampling is used instead.}
+\item{resamples}{Number of samples used if possible combinations exceeds max_combn}
 
 \item{verbose}{Print notifications?}
 }
 \value{
-A data frame.
+A data frame
 }
 \description{
 This function makes all pairwise/ setwise combinations of sites in the community matrix x and calculates pairwise/ setwise beta diversities,
-respectively. "Set" refers to a user-defined number of samples that will be used calculate gamma diversities. This is essentially
-the number of plots in a sample-based rarefaction. It's default is 2 (i.e. pairs). The function accepts the following indices: "S_PIE", "S_n", "S_cov".
-The latter two require a value for the standardisation of number of individuals (N_stand) and coverage (S_cov).
-If these arguments are not supplied, the function will standardise to the number of individuals of the smallest sample (if extrapolate = FALSE),
-or twice this number (if extrapolate = TRUE). For index = "S_cov" the corresponding expected coverages will be used if C_stand= NULL.
+respectively. "Set" refers to a user-defined number of samples that will be used. This is essentially
+the number of plots in a sample-based rarefaction. It's default is 2 (i.e. pairs).
 }
 \details{
+The calulation of the beta-diversity metric is done according to the function in "func". This should be a function that returns a
+(dis-)similarity or beta diversity metric for a site-by species matrix like x. "func" is applied to every subset. Addidtional arguments will be passed on to "func".
+
 If the number of possible sets/ pairwise comparisons exceeds the value of max_combn. A random subsample of all combinations will
 be drawn. The number of random samples can be adjusted using the argument resamples. It is not recommended increase the
 value of max_combn. The function choose() "n over k" can be used to manually compute the number of possible subsets where
@@ -43,4 +46,14 @@ The default value for setsize is 2 which means that pairwise beta diversities ar
 Pairwise beta_Sn values are independent of the gamma_scale diversity and sampling effort.
 Therefore, they allow for meaningfull comparisons between groups with different numbers of
 samples (see Marion et al, 2017).
+}
+\examples{
+\donttest{
+library(vegan)
+data(BCI)
+beta_pairwise<-
+beta_stand(BCI, func = list(beta_true, beta_SN, beta_C), setsize=2,
+args = list(N=150, C=0.5))
+}
+
 }

@@ -13,5 +13,5 @@ rarefy_long(x)
 a data.frame
 }
 \description{
-Please load tidyverse before using this.
+This returns rarefied richness in a long format
 }

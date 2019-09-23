@@ -7,8 +7,20 @@
 beta_true(x, transformation = F)
 }
 \arguments{
-\item{transformation}{}
+\item{x}{a site by species matrix}
+
+\item{transformation}{apply Jost's transformation?}
+}
+\value{
+numeric.
 }
 \description{
 Calculate Beta diversity
+}
+\examples{
+\donttest{
+library(vegan)
+data(BCI)
+beta_true(BCI)
+}
 }

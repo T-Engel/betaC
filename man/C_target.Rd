@@ -7,7 +7,7 @@
 C_target(x)
 }
 \arguments{
-\item{x}{}
+\item{x}{a site by specie matrix}
 }
 \value{
 numeric value

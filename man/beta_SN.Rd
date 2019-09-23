@@ -17,3 +17,10 @@ a numeric value
 \description{
 Calculate beta_Sn
 }
+\examples{
+\donttest{
+library(vegan)
+data(BCI)
+beta_Sn(BCI, 50)
+}
+}

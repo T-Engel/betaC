@@ -15,3 +15,11 @@ a tibble
 \description{
 Calculate beta_C/ beta_Sn curve
 }
+\examples{
+\donttest{
+library(vegan)
+data(BCI)
+beta_dat<-beta_C_curve(BCI)
+}
+
+}

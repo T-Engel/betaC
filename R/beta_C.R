@@ -179,7 +179,7 @@ beta_C <- function(x, C) {
 #' Calculate the recommended maximum coverage value for the computation of beta_C from a site by species matrix
 #'
 #' This returns the coverage of x at the gamma scale that corresponds to the smalles observed sample size at the alpha scale.
-#' @param x
+#' @param x a site by specie matrix
 #'
 #' @return numeric value
 #' @export
@@ -208,6 +208,11 @@ C_target <- function(x) {
 #' @export
 #'
 #' @examples
+#' \donttest{
+#' library(vegan)
+#' data(BCI)
+#' beta_Sn(BCI, 50)
+#' }
 beta_SN<-function(x, N){
   x<-as.matrix(x)
   total<-colSums(x)
@@ -230,13 +235,18 @@ beta_SN<-function(x, N){
 
 #' Calculate Beta diversity
 #'
-#' @param x
-#' @param transformation
+#' @param x a site by species matrix
+#' @param transformation apply Jost's transformation?
 #'
-#' @return
+#' @return numeric.
 #' @export
 #'
 #' @examples
+#' \donttest{
+#' library(vegan)
+#' data(BCI)
+#' beta_true(BCI)
+#' }
 beta_true= function(x, transformation= F){
     x= as.matrix(x)
     alpha= mean(vegan::specnumber(x))
@@ -253,10 +263,17 @@ beta_true= function(x, transformation= F){
 #'
 #' @return a tibble
 #' @export
+#' @import tibble
 #'
 #' @examples
+#' \donttest{
+#' library(vegan)
+#' data(BCI)
+#' beta_dat<-beta_C_curve(BCI)
+#' }
+#'
 beta_C_curve<-function(x){
-  require(tidyverse)
+  requireNamespace("tibble")
   if(length(dim(x))!=2) stop("x should be a site by species matrix.")
   x= as.matrix(x)
 
