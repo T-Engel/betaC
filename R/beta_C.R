@@ -273,7 +273,7 @@ beta_true= function(x, transformation= F){
 #' }
 #'
 beta_C_curve<-function(x){
-  requireNamespace("tibble")
+  require("tibble")
   if(length(dim(x))!=2) stop("x should be a site by species matrix.")
   x= as.matrix(x)
 
