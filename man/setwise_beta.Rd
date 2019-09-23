@@ -9,21 +9,17 @@ setwise_beta(x, setsize = 2, func, ...)
 \arguments{
 \item{x}{A site by species matrix.}
 
-\item{index}{One of the following indices: "S_n", "S_PIE", "S_cov"}
+\item{setsize}{number of sites in the matrix}
 
-\item{N_stand}{Number of individuals used if index = "S_n.}
+\item{func}{function returning the desired beta-diversity metric}
 
-\item{C_stand}{Coverage value used if index = "S_cov.}
-
-\item{extrapolate}{Logical. Use extrapolation?}
-
-\item{N_samples}{Number of samples in the set. Has to match the number of rows in x.}
+\item{...}{additional argumets passed on to func}
 }
 \value{
 A single numeric value for the beta diversity index.
 }
 \description{
-This is an internal helper function for beta_stand(). Beta-diversities are calculated for the number of samples
+This is an internal helper function for beta_stand(). Beta-diversity is calculated for the number of samples
 in x and the the given index. Therefore, x must have exactly N_samples rows. This is a security feature to ensure that users don't
 try to calculate another set size than given by the number of rows in x. Use beta_stand()!
 }

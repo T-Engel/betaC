@@ -1,22 +1,19 @@
 #' Calculate pairwise/ setwise beta diversities
 #'
-#' This is an internal helper function for beta_stand(). Beta-diversities are calculated for the number of samples
+#' This is an internal helper function for beta_stand(). Beta-diversity is calculated for the number of samples
 #' in x and the the given index. Therefore, x must have exactly N_samples rows. This is a security feature to ensure that users don't
 #' try to calculate another set size than given by the number of rows in x. Use beta_stand()!
 #'
 #' If extrapolate = F, observed S will be returned if N_stand exceeds sample size.
 #'
+#' @param setsize number of sites in the matrix
+#' @param func function returning the desired beta-diversity metric
+#' @param ... additional argumets passed on to func
 #' @param x A site by species matrix.
-#' @param index One of the following indices: "S_n", "S_PIE", "S_cov"
-#' @param N_stand Number of individuals used if index = "S_n.
-#' @param C_stand Coverage value used if index = "S_cov.
-#' @param extrapolate Logical. Use extrapolation?
-#' @param N_samples Number of samples in the set. Has to match the number of rows in x.
 #'
 #' @return A single numeric value for the beta diversity index.
 #'
-#'
-#' @examples
+
 setwise_beta <- function(x,
                          setsize = 2,
                          func,
@@ -32,11 +29,11 @@ setwise_beta <- function(x,
 #' Calculate pairwise/ setwise beta diversities
 #'
 #' This function makes all pairwise/ setwise combinations of sites in the community matrix x and calculates pairwise/ setwise beta diversities,
-#' respectively. "Set" refers to a user-defined number of samples that will be used calculate gamma diversities. This is essentially
-#' the number of plots in a sample-based rarefaction. It's default is 2 (i.e. pairs). The function accepts the following indices: "S_PIE", "S_n", "S_cov".
-#' The latter two require a value for the standardisation of number of individuals (N_stand) and coverage (S_cov).
-#' If these arguments are not supplied, the function will standardise to the number of individuals of the smallest sample (if extrapolate = FALSE),
-#' or twice this number (if extrapolate = TRUE). For index = "S_cov" the corresponding expected coverages will be used if C_stand= NULL.
+#' respectively. "Set" refers to a user-defined number of samples that will be used. This is essentially
+#' the number of plots in a sample-based rarefaction. It's default is 2 (i.e. pairs).
+#'
+#' The calulation of the beta-diversity metric is done according to the function in "func". This should be a function that returns a
+#' (dis-)similarity or beta diversity metric for a site-by species matrix like x. "func" is applied to every subset. Addidtional arguments will be passed on to "func".
 #'
 #' If the number of possible sets/ pairwise comparisons exceeds the value of max_combn. A random subsample of all combinations will
 #' be drawn. The number of random samples can be adjusted using the argument resamples. It is not recommended increase the
@@ -51,25 +48,36 @@ setwise_beta <- function(x,
 #'
 #'
 #' @param x A site by species matrix.
-#' @inheritParams setwise_beta
 #' @param setsize Number of samples per subset.
+#' @param func a list of function names to be used for the metric calculation
+#' @param args a list of additional arguments to be passed on to the functions in func
 #' @param summarise Return mean and variance of all betas?
+#' @param max_combn Number of combinations allowed before resampling is used instead
 #' @param resamples Number of samples used if possible combinations exceeds max_combn
-#' @param max_combn Number of combinations allowed before resampling is used instead.
 #' @param verbose Print notifications?
 #'
-#' @return A data frame.
+#' @return A data frame
 #' @export
+#' @import R.utils
 #'
 #' @examples
+#' \donttest{
+#' library(vegan)
+#' data(BCI)
+#' beta_pairwise<-
+#' beta_stand(BCI, func = list(beta_true, beta_SN, beta_C), setsize=2,
+#' args = list(N=150, C=0.5))
+#' }
+#'
 beta_stand <- function(x,
-                       func = list("beta_true", "beta_SN"),
                        setsize= 2,
+                       func = list("beta_true"),
+                       args = NULL,
                        summarise = T,
+                       max_combn = 10000,
                        resamples = 1000,
-                       max_combn = 1000,
-                       verbose= T,
-                       args) {
+                       verbose= T
+                       ) {
 
     x <- as.matrix(x)
     rownames(x) = NULL
@@ -105,7 +113,7 @@ beta_stand <- function(x,
         if (summarise == T) {
             out[[i]] <- data.frame(mean=mean(all_betas[[i]], na.rm = T),
                                    var=var(all_betas[[i]]),
-                                   func=i,
+                                   func=func[[i]],
                                    setsize=setsize)
 
         } else {
@@ -116,6 +124,8 @@ beta_stand <- function(x,
     if (summarise ==T) out <- do.call(rbind, out)
     else{
         out = do.call(cbind, out)
+        colnames(out)=unlist(func)
+
     }
     return(out)
 }
