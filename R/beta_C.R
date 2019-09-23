@@ -211,9 +211,18 @@ C_target <- function(x) {
 beta_SN<-function(x, N){
   x<-as.matrix(x)
   total<-colSums(x)
-  gamma_value=vegan::rarefy(total,N )
-  alpha_value=mean(vegan::rarefy(x, N))
-  beta=gamma_value/alpha_value
+  C= Chat(total,N)
+
+  if(N>1){
+    gamma_value = as.numeric(vegan::rarefy(total, N))
+    alpha_value = mean(vegan::rarefy(x, N))
+    beta = gamma_value / alpha_value
+  } else {
+    beta = NA
+  }
+
+  attr(beta, "C") = C
+  attr(beta, "N") = N
   return(beta)
 
 }
