@@ -1,6 +1,6 @@
 #' Calculate IBR curves at alpha and gamma scales and return them in a long format
 #'
-#' Please load tidyverse before using this.
+#' This returns rarefied richness in a long format
 #'
 #' @param x a site by species abundance matrix
 #'
