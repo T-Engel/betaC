@@ -13,5 +13,6 @@ Imports:
     magrittr,
     dplyr,
     tibble,
-    R.utils
+    R.utils,
+    plyr
 RoxygenNote: 6.1.1

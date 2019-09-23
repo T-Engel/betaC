@@ -7,11 +7,13 @@
 #' @return a data.frame
 #' @import magrittr
 #' @import dplyr
+#' @import plyr
 #'
 
 rarefy_long <- function(x) {
     requireNamespace(magrittr)
     requireNamespace(dplyr)
+
     if(is.matrix(x)==F) x=matrix(x,nrow = 1, byrow =T, dimnames= list("x", names(x)))
     alphas <-
         lapply(row.names(x), function(i)
