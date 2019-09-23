@@ -5,11 +5,13 @@
 #' @param x a site by species abundance matrix
 #'
 #' @return a data.frame
-#' @import tidyverse
+#' @import magrittr
+#' @import dplyr
 #'
 
 rarefy_long <- function(x) {
-    require(tidyverse)
+    require(magrittr)
+    require(dplyr)
     if(is.matrix(x)==F) x=matrix(x,nrow = 1, byrow =T, dimnames= list("x", names(x)))
     alphas <-
         lapply(row.names(x), function(i)
