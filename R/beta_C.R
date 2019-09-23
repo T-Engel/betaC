@@ -162,9 +162,16 @@ invChat <- function (x, C)
 beta_C <- function(x, C) {
   x <- as.matrix(x)
   total <- colSums(x)
-  gamma_value = as.numeric(vegan::rarefy(total, round(invChat(total, C))))
-  alpha_value = mean(vegan::rarefy(x, round(invChat(total, C))))
-  beta = gamma_value / alpha_value
+  N <- round(invChat(total, C))
+  if(N>1){
+    gamma_value = as.numeric(vegan::rarefy(total, N))
+    alpha_value = mean(vegan::rarefy(x, N))
+    beta = gamma_value / alpha_value
+  } else {
+    beta = NA
+  }
+  attr(beta, "C") = C
+  attr(beta, "N") = N
   return(beta)
 
 }
