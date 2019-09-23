@@ -2,7 +2,7 @@
 % Please edit documentation in R/beta_C.R
 \name{Chat}
 \alias{Chat}
-\title{C_hat calculate expected sample coverage}
+\title{Calculate expected sample coverage C_hat}
 \usage{
 Chat(x, m)
 }

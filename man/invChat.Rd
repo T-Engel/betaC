@@ -2,7 +2,7 @@
 % Please edit documentation in R/beta_C.R
 \name{invChat}
 \alias{invChat}
-\title{Number of individuals corresponding to a desired coverage}
+\title{Number of individuals corresponding to a desired coverage (inverse C_hat)}
 \usage{
 invChat(x, C)
 }
