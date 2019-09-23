@@ -9,6 +9,7 @@
 #'
 
 rarefy_long <- function(x) {
+    require(tidyverse)
     if(is.matrix(x)==F) x=matrix(x,nrow = 1, byrow =T, dimnames= list("x", names(x)))
     alphas <-
         lapply(row.names(x), function(i)
