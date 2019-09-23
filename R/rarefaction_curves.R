@@ -5,6 +5,7 @@
 #' @param x a site by species abundance matrix
 #'
 #' @return a data.frame
+#' @import tidyverse
 #'
 
 rarefy_long <- function(x) {
