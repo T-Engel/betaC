@@ -141,3 +141,9 @@ Furthermore, there is a function that helps to determine the target
 coverage value:
 
   - `C_target`
+
+<!-- badges: start -->
+
+[![Travis build
+status](https://travis-ci.org/T-Engel/betaC.svg?branch=master)](https://travis-ci.org/T-Engel/betaC)
+<!-- badges: end -->
