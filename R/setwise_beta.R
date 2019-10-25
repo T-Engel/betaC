@@ -95,7 +95,7 @@ beta_stand <- function(x,
 
     pairs <- vector("list", length = ncol(combinations))
     for (i in 1:ncol(combinations)) {
-        pairs[[i]] <- x[combinations[, i],]
+        pairs[[i]] <- x[combinations[, i],, drop=F]
         pairs[[i]] <- pairs[[i]][, colSums(pairs[[i]]) > 0, drop = F]
     }
     all_betas<- as.list(rep(NA, length(func)))
