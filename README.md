@@ -18,116 +18,115 @@ Please, also install the package “vegan” from CRAN. Furthermore,
 “tidyverse” is recommended but the main functions will work without
 it.
 
+## Quick guide
+
+If you are familiar with the concept of beta\_C and you just want to
+have the code, here is all you need to know. If you’re unfamiliar with
+the method you might want to read the paper and go through the basic
+examples that follow below.
+
+  - The main function of this package is `beta_C(x, C)` It’s first
+    argument `x`takes a site-by-species abundance matrix as a matrix
+    object or data frame (sites=rows, species= rows). The second
+    argument `C` is target coverage used for standardization. The
+    function returns beta\_C for the target coverage as a numeric value.
+    Type `?beta_C` to see the documentation.
+
+  - The other important function is `C_target(x)`. Its only argument `x`
+    is a site-by-species abundance matrix. It returns the maximum
+    possible coverage value that can be used to calculate beta\_C for
+    the community matrix `x`. When comparing beta\_C across multiple
+    communities it is recommended to choose the `C` argument in
+    `beta_C(x, C)`such that it corresponds to the smallest `C_target()`
+    output of all the communities. Type \`?C\_target to see the
+    documentation.
+
 ## Example: Beta-diversity of the BCI dataset from vegan
 
-Let’s look at the beta\_diversity of the BCI dataset that comes with the
-package vegan. First we calculate Whittaker’s multiplicative
-beta-diverity and than we standardize it to a sample coverage of 50%
-using `beta_C`.
+Let’s look at the beta\_diversity of the `BCI` dataset that comes with
+the package vegan. It’s a site by species abundance matrix with 50 plots
+and 225 species from the Barro Colorado Island in Panama. If you want to
+know more about the dataset type `?BCI` after loading the the vegan
+package. We are intereted in the beta-diversity of the island because it
+tells us something about the spatial structure species diversity. First,
+let’s calculate Whittaker’s multiplicative beta-diverity as
+\[\beta=\frac{\gamma}{\overline{\alpha}}\], where \(\gamma\) is the
+gamma species richness (i.e. all plots combined) and
+\(\overline{\alpha}\) is the alpha species richness (i.e. the average
+plot richness).
 
 ``` r
 library(betaC)
 library(vegan)
 #> Loading required package: permute
 #> Loading required package: lattice
-#> This is vegan 2.5-4
+#> This is vegan 2.5-6
 data(BCI)
 
-# Multiplicative beta-diversity 
+# Whittakers multiplicative beta-diversity 
 gamma=specnumber(colSums(BCI))
 alpha= mean(specnumber(BCI))
 beta_BCI=gamma/alpha
 beta_BCI
 #> [1] 2.478519
-
-# beta_C for 50% coverage
-beta_C_BCI<-beta_C(BCI,0.5)
-beta_C_BCI
-#> [1] 1.088571
 ```
 
-The samples have a beta-diversity of 2.48 but most of this sample
-differention is due to a sampling effect. If we standardize to the
-number of individuals that corresponds to 50 % coverage at the gamma
-scale we find that the partition of the non-random component in
-beta-diversity is only ca. 1.09
+The samples have a beta-diversity of 2.48 The unit of this value is
+“effective number of distinct sampling units”. This means that it
+takes 2.48 hypothetical plots with complete species turnover to produce
+the same beta-diversity that we observe in this data-set. Note that the
+maximum possible value of beta is 50 here. In that case all 50 plots
+would be completely unique in their species identities. The minimum
+value of beta is 1 in which case all the plots share the same species.
+However, this assumes that the sample size is big enough to randomly
+sample all the species in the area - in other words that the samples are
+complete. While this may be true on the gamma scale, where we have a
+really large sample size, the alpha scale has a way smaller number of
+individuals. Remember that the gamma scale has all the individuals of
+the 50 subplots combined, while the average plot has only a 50th of this
+sample size. Let’s have a look at this difference:
+
+``` r
+N_alpha= mean(rowSums(BCI))
+N_gamma= sum(BCI)
+barplot(c("gamma"=N_gamma,"alpha"= N_alpha), ylab = "Number of individuals", xlab = "Scale")
+```
+
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="150%" />
+
+To controll for this vast difference in sample size between the scales
+we use individual based rarefaction (IBR). IBR lets you ask the question
+“How many species can I expect to find if I sampled *n* Individuals
+rather than the actual sample size of *N*?” This enables us to rescale
+our gamma diversity estimate to the sample size observed at the alpha
+scale. The relationship between the rarefied richness and the sample
+size *n* used for rarefaction is called a individual based rarefaction
+curve.
 
 To illustrate this let’s have a look at the two-scale rarefaction curve.
 
 ``` r
 library(tidyverse)
 
-# calculate rarefaction curves
-dat<-betaC:::rarefy_long(as.matrix(BCI))
+# alpha 
+alphas_curves<-rarecurve(BCI)
+```
+
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="150%" />
+
+``` r
+N_min= min(rowSums(BCI))
+mean_alpha_curve= sapply(alphas_curves,function(x) return(as.numeric(x[1:N_min])) ) %>% rowMeans()
+
+#gamma
+gamma_curve= as.numeric(rarefy(colSums(BCI),sample = 1:N_gamma))
 
 # plot them
-dat %>% filter(type== "major") %>% ggplot(aes(N,S_n, col= Curve))+ geom_line(size=1)+ geom_hline(yintercept =  alpha)+
-geom_hline(yintercept =  gamma)+ geom_vline(xintercept =  invChat(colSums(BCI), 0.5), linetype= "dashed")
+plot(gamma_curve, xlab = "Number of individuals", ylab= "Rarefied richness", type = "l", lwd=2)
+lines(mean_alpha_curve, col =3, lwd=2)
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="150%" />
-
-The horizontal black lines indicate the observed species richness at
-alpha and gamma scales. The rarefaction curves fall very closely on top
-of each other indicating that there is not a strong signal of spatial
-structure. The observed beta-diversity is mostly caused by difference in
-sample size. Beta\_C of 50% is calculated at a sample size of 40
-individuals (dashed vertical line).
-
-For this example we chose the 50% arbitrarily. We can also examine the
-entire scaling relationship of the nonrandom component in
-beta-diversity. To do that we calculate beta\_Sn for every N and the
-corresponding coverages at the gamma scale. This can be done using
-`beta_C_curve`.
-
-``` r
-BCI_curve<-beta_C_curve(BCI)
-
-head(BCI_curve)
-#> # A tibble: 6 x 3
-#>       N      C beta_Sn
-#>   <int>  <dbl>   <dbl>
-#> 1     1 0.0263    1.  
-#> 2     2 0.0512    1.01
-#> 3     3 0.0748    1.01
-#> 4     4 0.0973    1.02
-#> 5     5 0.119     1.02
-#> 6     6 0.139     1.03
-```
-
-And here are the plots:
-
-``` r
-
-N_plot <-
-    BCI_curve %>% ggplot(aes(N, beta_Sn)) + geom_line(size = 1) + geom_rug() +
-    geom_hline(yintercept = beta_C_BCI,
-               col = "red",
-               linetype = "dotted") + geom_vline(
-                   xintercept = invChat(colSums(BCI), 0.5),
-                   col = "red",
-                   linetype = "dotted"
-               )
-C_plot <-
-    BCI_curve %>% ggplot(aes(C, beta_Sn)) + geom_line(size = 1) + geom_rug() +
-    geom_hline(yintercept = beta_C_BCI,
-               col = "red",
-               linetype = "dotted") + geom_vline(
-                   xintercept =  0.5,
-                   col = "red",
-                   linetype = "dotted"
-               )
-plot_grid(N_plot, C_plot, align = "v")
-```
-
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="150%" />
-
-Note that both graphs show the same data on the y axis. The value
-corresponding to 50% that we calculated previously is indicated by the
-dotted red lines. The coverage/ sample size value used for the
-standarisation stronly influences the value of beta\_C. Therefore it
-should always be reported and compared with respect to the underlying
-coverage.
+<img src="man/figures/README-unnamed-chunk-3-2.png" width="150%" />
 
 ## Functions
 
