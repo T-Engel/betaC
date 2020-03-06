@@ -25,7 +25,7 @@ have the code, here is all you need to know. If you’re unfamiliar with
 the method you might want to read the paper and go through the basic
 examples that follow below.
 
-  - The main function of this package is `beta_C(x, C)` It’s first
+  - The main function of this package is `beta_C(x, C)` Its first
     argument `x`takes a site-by-species abundance matrix as a matrix
     object or data frame (sites=rows, species= rows). The second
     argument `C` is target coverage used for standardization. The
@@ -38,7 +38,7 @@ examples that follow below.
     the community matrix `x`. When comparing beta\_C across multiple
     communities it is recommended to choose the `C` argument in
     `beta_C(x, C)`such that it corresponds to the smallest `C_target()`
-    output of all the communities. Type \`?C\_target to see the
+    output of all the communities. Type `?C_target` to see the
     documentation.
 
 ## Example: Beta-diversity of the BCI dataset from vegan
@@ -50,10 +50,12 @@ know more about the dataset type `?BCI` after loading the the vegan
 package. We are intereted in the beta-diversity of the island because it
 tells us something about the spatial structure species diversity. First,
 let’s calculate Whittaker’s multiplicative beta-diverity as
-\[\beta=\frac{\gamma}{\overline{\alpha}}\], where \(\gamma\) is the
-gamma species richness (i.e. all plots combined) and
-\(\overline{\alpha}\) is the alpha species richness (i.e. the average
-plot richness).
+
+![formula](https://render.githubusercontent.com/render/math?math=%5Cbeta%3D%5Cfrac%7B%5Cgamma%7D%7B%5Coverline%7B%5Calpha%7D%7D)
+
+where \(\gamma\) is the gamma species richness (i.e. all plots combined)
+and \(\overline{\alpha}\) is the alpha species richness (i.e. the
+average plot richness).
 
 ``` r
 library(betaC)
