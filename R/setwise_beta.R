@@ -57,7 +57,7 @@ setwise_beta <- function(x,
 #' @param verbose Print notifications?
 #'
 #' @return A data frame
-#' @export
+#'
 #'
 #' @examples
 #' \donttest{
