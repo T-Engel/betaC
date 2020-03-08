@@ -56,11 +56,9 @@ If you're unfamiliar with the method you might want to read the paper and take t
 
 betaC is a beta-diversity index that measures intraspecific spatial aggregation or species turnover in space independently of the size of the regional species pool. This is important because most beta-diversity metrics don't only respond to the spatial structure of species diversity in an area but also to the total number of species occuring there. So, high beta-diversity can mean that there is a strong spatial clumping of species and/or that there is just a high gamma diversity. People have tried to disentangle these effects with mixed results.
 
-In our paper we make the argument that the species-pool dependence of beta-diversity can be traced back to two types of sampling effects. The first one arises because alpha and gamma scale diversity estimates are usually based on very different sample sizes (i.e.,  numbers of individuals captured by a sample). The second concerns sample completeness and the fact that sample size is always relative. In small species pools, relatively small sample sizes are sufficient to get a pretty complete sample, while in large species pools sample sizes have to be increased dramatically to achieve the same degree of sample completeness (e.g. capturing 80% of all the species in the area). 
+In our paper we make the argument that the species-pool dependence of beta-diversity is linked to two types of sampling effects. The first one arises because alpha and gamma scale diversity estimates are usually based on very different sample sizes (i.e.,  numbers of individuals captured by a sample). This means that a major part of beta diversity is usually due to a more-individuals effect and not due to spatial structure. The second sampling effectsconcerns sample completeness and its associated biases. Sample size is always relative. In small species pools, relatively small sample sizes are sufficient to get a pretty good sample, while in large species pools sample sizes have to be increased dramatically to achieve the same degree of sample completeness (e.g. capturing 80% of all the species in the area). We argue that species pool dependence of beta-diversity is in fact the result of changing sample completeness.
 
 betaC controls for these sampling effects using a combination of individual-based and coverage-based rarefaction. The main idea of our apporach is that within a species pool alpha and gamma scale dieversity estimates are standardized to a common number of individuals, while across species pools we allow the sample size to vary in order to keep a constant gamma-scale sample completeness instead, which is estimated using sample coverage (*C*).
-
-The example below will hopefully help drive home this argument.
 
 ### Example 1: Beta-diversity of the BCI data set from vegan
 **Why to standardize alpha and gamma scale to the same sample size?**
@@ -92,7 +90,7 @@ N_gamma= sum(BCI)
 barplot(c("gamma"=N_gamma,"alpha"= N_alpha), ylab = "Number of individuals", xlab = "Scale")
 ```
 
-To control for this vast difference in sample size between the scales we use a method called individual-based rarefaction (IBR). IBR lets you ask the question "How many species can I expect to find if I sampled *n* Individuals rather than the actual sample size of *N*?" This enables us to rescale our gamma diversity estimate to the sample size observed at the alpha scale. The relationship between this "rarefied richness" and the sample size *n* used for rarefaction is called a individual based rarefaction curve. The r package `vegan` provides functions to carry out IBR. Let's plot the IBR curve for gamma scale and see how the species richness changes when we rarefy it down to the sample size of the alpha scale.
+To control for this vast difference in sample size between the scales we use a method called individual-based rarefaction (IBR). IBR lets you ask the question "How many species can I expect to find if I sampled *n* Individuals rather than the actual sample size of *N*?" This enables us to rescale our gamma diversity estimate to the sample size observed at the alpha scale. The relationship between this "rarefied richness" and the sample size *n* is called a individual based rarefaction curve. The r package `vegan` provides functions to carry out IBR. Let's plot the IBR curve for the gamma scale and see how the species richness changes when we rarefy it down to the sample size of the alpha scale.
 
 ```{r  message=FALSE, warning=FALSE}
 #gamma
@@ -105,15 +103,14 @@ abline(h = gamma_curve[N_alpha], col="grey", lty=3, lwd=2)
 legend("bottomright", legend = "gamma", col = 1, lty = 1,lwd = 2,bty = "n")
 
 ```
-
-The grey vertical line marks the alpha scale sample size and the horizontal grey line is the rarefied richness of the gamma scale that corresponds to this sample size. It looks like about half of the species on the gamma scale have only been found because the gamma scale as way more individuals than the alpha scale. Isn't that an unfair comparison? Let's look at the alpha scale to see how it compares.
+This black curve is the gamma scale IBR curve. Typically, accumulation or rarefaction curves have this non-linaner shape of a saturation curve. The grey vertical line marks the alpha scale sample size and the horizontal grey line is the rarefied richness of the gamma scale that corresponds to this sample size. It looks like about half of the species on the gamma scale have only been found because the gamma scale as way more individuals than the alpha scale. Let's look at the alpha scale to see how it compares.
 
 ```{r}
 # alpha 
 alphas_curves<-rarecurve(BCI)
 ```
 
-These are all the alpha scale rarefaction curves. We are usually interested in the average plot. Therefore let's take the mean of these curves and plot in the same graph as the gamma scale
+These are all the alpha scale rarefaction curves. We are usually interested in the average sample Therefore let's take the mean of these curves. Also, lets put them inthe in the same graph as the gamma scale to see how they compare.
 
 ```{r}
 N_min= min(rowSums(BCI))
@@ -121,13 +118,26 @@ mean_alpha_curve= sapply(alphas_curves,function(x) return(as.numeric(x[1:N_min])
 
 
 plot(gamma_curve, xlab = "Number of individuals", ylab= "Rarefied richness", type = "l", lwd=2)
-abline(v = N_alpha, col="grey", lty=3)
+
 lines(mean_alpha_curve, col =3, lwd=2)
 ```
 
+Now, the green curve that we added is the mean alpha scale IBR. It sits slightly below the gamma scale but most of the difference in species richness between the to scales is really due to the more-individuals effect. If the curves fall right on top of each other species are randomly distributed and if the alpha scale is below the gamma scale this indicates intraspecific spatial aggregation. We quantify this aggregation as the deviation between the two curves at a common number of individuals (usually that is the smallest number of individuals found at the alpha scale)
+
+Like Whittaker's beta we calculate an index of gamma over alpha. However here we use the rarefied richness estimates rather than the observed species richness. The resulting index is called beta_Sn. Let's calculate it.
+
+
+```{r}
+beta_Sn_BCI<-beta_SN(BCI, N_min)
+beta_Sn_BCI
+```
+
+The value is larger than 1, which indicates the spatial aggregation. However it is much smaller than the traditional beta-diversity, that was inflated due to the more-individuals effect. Instead of `r round(beta_BCI,2)` times as many species, now the gamma scale only has `r round(beta_Sn_BCI,2)` times as many individuals as the alpha scale when controlled for sample size. This is the true effect of spatial aggregation.
 
 ### Example 2: Comparing aggregtion across species pools
 **Why to standardize beta-diversity by coverage?**
+
+We saw that the deviation between alpha and gamma scale is due to nonrandom structure, however the magnitude of this depends on how far out along the IBR curve it is calculated.
 
 ## Accessing the data of the manuscript
 
