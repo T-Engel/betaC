@@ -1,7 +1,7 @@
 
-# betaC
+# About betaC
 
-The r package “betaC” accompanies the following manuscript to be
+This r package “betaC” accompanies the following manuscript to be
 submitted to *Methods in Ecology and Evolution*:
 
 **Engel T., Blowes, S. A. McGlinn, D. J., May, F., Gotelli, N. J,
@@ -12,19 +12,19 @@ The manuscript will also be made available on biorxiv shortly.
 
 ## Objectives
 
-This package has two main objectives:
+The r package and this repository have two main objectives:
 
-1.  It provides easy tools for the calculation of beta\_C, a metric that
-    quantifies the non-random component in beta-diversity for a given
-    sample completeness.
+1.To provide easy tools for the calculation of beta\_C, a metric that
+quantifies the non-random component in beta-diversity for a given sample
+completeness.
 
-2.  It serves as a platform to share the simulation code and results
-    that we use in our above-mentioned paper. The data will be archived
-    upon acceptance of the manuscript.
+2.  To serve as a platform to share the simulation code and results that
+    we use in our above-mentioned paper. The data presented here will be
+    archived upon acceptance of the manuscript.
 
 ## Installation
 
-You can install the development version of betaC from
+You can install the development version of the package “betaC” from
 [GitHub](https://github.com/T-Engel/betaC) with:
 
 ``` r
@@ -81,7 +81,7 @@ arises because alpha and gamma scale diversity estimates are usually
 based on very different sample sizes (i.e., numbers of individuals
 captured by a sample). This means that a major part of beta diversity is
 usually due to a more-individuals effect and not due to spatial
-structure. The second sampling effectsconcerns sample completeness and
+structure. The second sampling effect concerns sample completeness and
 its associated biases. Sample size is always relative. In small species
 pools, relatively small sample sizes are sufficient to get a pretty good
 sample, while in large species pools sample sizes have to be increased
@@ -92,15 +92,15 @@ changing sample completeness.
 
 betaC controls for these sampling effects using a combination of
 individual-based and coverage-based rarefaction. The main idea of our
-apporach is that within a species pool alpha and gamma scale dieversity
+approach is that within a species pool alpha and gamma scale diversity
 estimates are standardized to a common number of individuals, while
 across species pools we allow the sample size to vary in order to keep a
 constant gamma-scale sample completeness instead, which is estimated
 using sample coverage (*C*).
 
-### Example 1: Beta-diversity of the BCI data set from vegan
+### Why to standardize alpha and gamma scale to the same sample size?
 
-**Why to standardize alpha and gamma scale to the same sample size?**
+**Example 1: Beta-diversity of the BCI data set from vegan**
 
 Let’s look at the beta\_diversity of the `BCI` data set that comes with
 the package vegan. It’s a site by species abundance matrix with 50 plots
@@ -220,10 +220,10 @@ aggregation as the deviation between the two curves at a common number
 of individuals (usually that is the smallest number of individuals found
 at the alpha scale)
 
-Like Whittaker’s beta we calculate an index of gamma over alpha. However
-here we use the rarefied richness estimates rather than the observed
-species richness. The resulting index is called beta\_Sn. Let’s
-calculate it.
+Like Whittaker’s beta we calculate an index of gamma over alpha.
+However, here we use the rarefied richness estimates rather than the
+observed species richness. The resulting index is called beta\_Sn. Let’s
+calculate it with the function `beta_SN` provided by our package.
 
 ``` r
 beta_Sn_BCI<-beta_SN(BCI, N_min)
@@ -235,22 +235,38 @@ beta_Sn_BCI
 #> [1] 340
 ```
 
-The value is larger than 1, which indicates the spatial aggregation.
-However it is much smaller than the traditional beta-diversity, that was
-inflated due to the more-individuals effect. Instead of 2.48 times as
-many species, now the gamma scale only has 1.13 times as many
-individuals as the alpha scale when controlled for sample size. This is
-the true effect of spatial aggregation.
+The value is larger than 1, which indicates the spatial aggregation that
+we saw from looking at the IBR curves. However, it is much smaller than
+the traditional beta-diversity that was inflated due to the
+more-individuals effect. Instead of 2.48 times as many species, now the
+gamma scale only has 1.13 times as many individuals as the alpha scale
+when controlled for sample size. This is the true effect of spatial
+aggregation.
 
-### Example 2: Comparing aggregtion across species pools
-
-**Why to standardize beta-diversity by coverage?**
+### Why to standardize beta-diversity by coverage?
 
 We saw that the deviation between alpha and gamma scale is due to
-nonrandom structure, however the magnitude of this depends on how far
-out along the IBR curve it is calculated.
+non-random spatial structure in diversity, however the magnitude of this
+depends on how far out along the IBR curve it is calculated. It turns
+out that the closer we get to the assymptote of the gamma scale IBR, the
+bigger can be the gap between the curves.
 
-## Accessing the data of the manuscript
+``` r
+beta_SN(BCI, 10)
+#> [1] 1.039994
+#> attr(,"C")
+#> [1] 0.2109857
+#> attr(,"N")
+#> [1] 10
+```
+
+Now, the value is much smaller than the value that we calculated before,
+although we are quantifying the deviation between the same pair of
+curves.
+
+This becomes relevant when we want to compare beta\_Sn among assemblages
+with differently sized species pools. If the species pool is \#\#
+Accessing the data of the manuscript
 
 ## Key references
 
