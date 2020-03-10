@@ -14,13 +14,13 @@ The manuscript will also be made available on biorxiv shortly.
 
 The r package and this repository have two main objectives:
 
-1.To provide easy tools for the calculation of beta\_C, a metric that
-quantifies the non-random component in beta-diversity for a given sample
-completeness.
+1.  To provide easy tools for the calculation of beta\_C, a metric that
+    quantifies the non-random component in beta-diversity for a given
+    sample completeness.
 
-2.  To serve as a platform to share the simulation code and results that
-    we use in our above-mentioned paper. The data presented here will be
-    archived upon acceptance of the manuscript.
+2.  To to share the simulation code and results that we use in our
+    above-mentioned paper. The data presented here will be archived upon
+    acceptance of the manuscript.
 
 ## Installation
 
@@ -213,7 +213,7 @@ lines(mean_alpha_curve, col =3, lwd=2)
 Now, the green curve that we added is the mean alpha scale IBR. It sits
 slightly below the gamma scale but most of the difference in species
 richness between the to scales is really due to the more-individuals
-effect. If the curves fall right on top of each other species are
+effect. If the curves fall right on top of each other, species are
 randomly distributed and if the alpha scale is below the gamma scale
 this indicates intraspecific spatial aggregation. We quantify this
 aggregation as the deviation between the two curves at a common number
