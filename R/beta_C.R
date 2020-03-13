@@ -287,4 +287,43 @@ beta_C_curve<-function(x){
 }
 
 
+#' Calculate PIE and Effective number of species (S_PIE)
+#'
+#' This function was copied from  the package \href{https://github.com/MoBiodiv/mobr/}{mobr}.
+#'
+#' @param x site by species matrix
+#' @param ENS return effective number of species?
+#'
+#' @return
+#' @export
+#'
+
+calc_PIE = function(x, ENS=FALSE) {
+  x = drop(as.matrix(x))
+  if (any(x < 0, na.rm = TRUE))
+    stop("input data must be non-negative")
+  if (length(dim(x)) > 1) {
+    total = apply(x, 1, sum)
+    S = apply(x, 1, function(x) return(sum(x > 0)))
+    x = sweep(x, 1, total, "/")
+  } else {
+    total = sum(x)
+    S = sum(x > 0)
+    x = x / total
+  }
+  x = x * x
+  if (length(dim(x)) > 1) {
+    H = rowSums(x, na.rm = TRUE)
+  } else {
+    H = sum(x, na.rm = TRUE)
+  }
+  # calculate PIE without replacement (for total >= 2)
+  H = ifelse(total < 2, NA, (total / (total - 1) * (1 - H)))
+  if (ENS) {
+    # convert to effective number of species (except for PIE == 1)
+    H = ifelse(H==1| S == total, NA, (1/ (1-H)))
+  }
+  return(H)
+}
+
 
