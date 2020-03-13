@@ -19,8 +19,8 @@ The r package and this repository have two main objectives:
     sample completeness.
 
 2.  To to share the simulation code and results that we use in our
-    above-mentioned paper. The data presented here will be archived upon
-    acceptance of the manuscript.
+    above-mentioned paper. You can find them in the folder
+    [Simulations](https://github.com/T-Engel/betaC/tree/master/Simulations).
 
 ## Installation
 
