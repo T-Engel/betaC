@@ -5,7 +5,7 @@ library(furrr)
 library(betaC)
 
 # Seed
-set.seed(1234)
+set.seed(123)
 
 # parameters for simulation
 n_sim = 4000 #number of indivduals

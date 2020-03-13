@@ -4,7 +4,7 @@ library(cowplot)
 library(betaC)
 theme_set(theme_cowplot())
 
-dat<-readRDS( "data/simulation_data.rds")
+dat<-readRDS( "Simulations/simulation_data.rds")
 
 # Calculate metrics
 # Richness
@@ -148,4 +148,4 @@ r1<-plot_grid(aggr_plot,rand_plot, labels = c("A", "B"))
 
 fig4_new<-plot_grid(r1, bottom_row, ncol = 1, labels= c("", "C"))
 
-ggsave("figures/Figure4.jpg",fig4_new, width = 21, height = 21, units="cm")
+ggsave("Simulations/Figure4.jpg",fig4_new, width = 21, height = 21, units="cm")
