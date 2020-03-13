@@ -55,6 +55,7 @@ setwise_beta <- function(x,
 #' @param max_combn Number of combinations allowed before resampling is used instead
 #' @param resamples Number of samples used if possible combinations exceeds max_combn
 #' @param verbose Print notifications?
+#' @import utils
 #'
 #' @return A data frame
 #'

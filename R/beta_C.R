@@ -88,6 +88,7 @@ Chat <- function (x, m)
 #'
 #' @return a numeric value
 #' @export
+#' @import stats
 #' @examples
 #' \donttest{
 #' library(vegan)

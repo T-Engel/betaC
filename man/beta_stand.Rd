@@ -4,8 +4,16 @@
 \alias{beta_stand}
 \title{Calculate pairwise/ setwise beta diversities}
 \usage{
-beta_stand(x, setsize = 2, func = list("beta_true"), args = NULL,
-  summarise = T, max_combn = 10000, resamples = 1000, verbose = T)
+beta_stand(
+  x,
+  setsize = 2,
+  func = list("beta_true"),
+  args = NULL,
+  summarise = T,
+  max_combn = 10000,
+  resamples = 1000,
+  verbose = T
+)
 }
 \arguments{
 \item{x}{A site by species matrix.}
