@@ -1,8 +1,8 @@
 
 # About betaC
 
-This r package “betaC” accompanies the following manuscript to be
-submitted to *Methods in Ecology and Evolution*:
+This r package “betaC” accompanies the following manuscript submitted to
+*Methods in Ecology and Evolution*:
 
 **Engel T., Blowes, S. A. McGlinn, D. J., May, F., Gotelli, N. J,
 McGill, B. J., Chase, J. M. (2020). Resolving the species pool
@@ -98,7 +98,7 @@ across species pools we allow the sample size to vary in order to keep a
 constant gamma-scale sample completeness instead, which is estimated
 using sample coverage (*C*).
 
-### Why to standardize alpha and gamma scale to the same sample size?
+### Detour 1: Why to standardize alpha and gamma scale to the same sample size?
 
 **Example 1: Beta-diversity of the BCI data set from vegan**
 
@@ -241,15 +241,16 @@ the traditional beta-diversity that was inflated due to the
 more-individuals effect. Instead of 2.48 times as many species, now the
 gamma scale only has 1.13 times as many individuals as the alpha scale
 when controlled for sample size. This is the true effect of spatial
-aggregation.
+aggregation, conditional on the sample size of340.
 
-### Why to standardize beta-diversity by coverage?
+#### 
 
-We saw that the deviation between alpha and gamma scale is due to
-non-random spatial structure in diversity, however the magnitude of this
-depends on how far out along the IBR curve it is calculated. It turns
-out that the closer we get to the assymptote of the gamma scale IBR, the
-bigger can be the gap between the curves.
+So, we saw that the deviation between alpha and gamma scale is due to
+non-random spatial structure in diversity. However, the magnitude of
+this gap depends on how far out along the IBR curve it is calculated.
+Let’s use the same example from above but now, instead of calculating
+beta\_Sn at for a sample size of 340, let’s use a much smaller value of
+n=10.
 
 ``` r
 beta_SN(BCI, 10)
@@ -260,13 +261,34 @@ beta_SN(BCI, 10)
 #> [1] 10
 ```
 
-Now, the value is much smaller than the value that we calculated before,
-although we are quantifying the deviation between the same pair of
-curves.
+This estimate corresponds to a point of the IBR that is much further
+away from the asymptote than the previous one. It turns out that the
+closer we get to the asymptote of the gamma scale IBR, the bigger this
+gap can be. This becomes important if we want to compare beta\_SN values
+from one community to the next. Because “farawayness” from the asymptode
+cannot be described by samplesize alone.
 
-This becomes relevant when we want to compare beta\_Sn among assemblages
-with differently sized species pools. If the species pool is \#\#
-Accessing the data of the manuscript
+### Detour 2: Why to standardize beta-diversity by coverage?
+
+**Sample size is always relative**
+
+While samplesize is surely related to the distance to the aysmptode of
+the IBR, it is only part of the story, because it is always relative.
+The asymptode or more generally the slope at any point along the IBR
+curve relates to sample completeness. This is different from sample size
+because it depends on the species pool of the community that you are
+sampling. For example consider a forest that has a total of 100 species
+and for the sake of this exercise let’s assume that all of them are
+equally common. Now, we take a random sample of 500 trees. It is pretty
+likely that most if not all species in this forest will be captured by
+our sample. In other words: In this first forest, the sample size of 500
+correponds to a *high sample completeness* and is *close to the
+asyptote*. Now, imagine a second forest that has has way more species,
+let’s say 500. Again, we take a sample size of 500 trees. This time our
+sample will be pretty far from complete because it highly unlikely that
+all 500 species will be represented in the sample. In other words: In
+this second forest, the sample size of 500 correponds to a *low sample
+completeness* and is *far away to the asyptote*.
 
 ## Key references
 
