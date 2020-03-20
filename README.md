@@ -70,7 +70,7 @@ betaC is a beta-diversity index that measures intraspecific spatial
 aggregation or species turnover in space independently of the size of
 the regional species pool. This is important because most beta-diversity
 metrics don’t only respond to the spatial structure of species diversity
-in an area but also to the total number of species occuring there. So,
+in an area but also to the total number of species occurring there. So,
 high beta-diversity can mean that there is a strong spatial clumping of
 species and/or that there is just a high gamma diversity. People have
 tried to disentangle these effects with mixed results.
@@ -100,7 +100,7 @@ using sample coverage (*C*).
 
 ## Detour 1: Why to standardize alpha and gamma scale to the same sample size?
 
-**Example 1: Beta-diversity of the BCI data set from vegan**
+### Example: Beta-diversity of the BCI data set from vegan
 
 Let’s look at the beta\_diversity of the `BCI` data set that comes with
 the package vegan. It’s a site by species abundance matrix with 50 plots
@@ -178,13 +178,13 @@ legend("bottomright", legend = "gamma", col = 1, lty = 1,lwd = 2,bty = "n")
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="75%" /> This
 black curve is the gamma scale IBR curve. Typically, accumulation or
-rarefaction curves have this non-linaner shape of a saturation curve.
-The grey vertical line marks the alpha scale sample size and the
-horizontal grey line is the rarefied richness of the gamma scale that
-corresponds to this sample size. It looks like about half of the species
-on the gamma scale have only been found because the gamma scale as way
-more individuals than the alpha scale. Let’s look at the alpha scale to
-see how it compares.
+rarefaction curves have this non-linear shape of a saturation curve. The
+grey vertical line marks the alpha scale sample size and the horizontal
+grey line is the rarefied richness of the gamma scale that corresponds
+to this sample size. It looks like about half of the species on the
+gamma scale have only been found because the gamma scale as way more
+individuals than the alpha scale. Let’s look at the alpha scale to see
+how it compares.
 
 ``` r
 # alpha 
@@ -195,7 +195,7 @@ alphas_curves<-rarecurve(BCI)
 
 These are all the alpha scale rarefaction curves. We are usually
 interested in the average sample Therefore let’s take the mean of these
-curves. Also, lets put them inthe in the same graph as the gamma scale
+curves. Also, lets put them in the in the same graph as the gamma scale
 to see how they compare.
 
 ``` r
@@ -265,32 +265,37 @@ This estimate corresponds to a point of the IBR that is much further
 away from the asymptote than the previous one. It turns out that the
 closer we get to the asymptote of the gamma scale IBR, the bigger this
 gap can be. This becomes important if we want to compare beta\_SN values
-from one community to the next. Because “farawayness” from the asymptode
-cannot be described by samplesize alone.
+from one community to the next. Because “farawayness” from the asymptote
+cannot be described by sample size alone.
 
-### Detour 2: Why to standardize beta-diversity by coverage?
+## Detour 2: Why to standardize beta-diversity by coverage?
 
-**Sample size is always relative**
+### Sample size is always relative
 
-While sample size is surely related to the distance to the aysmptode of
+While sample size is surely related to the distance to the asymptote of
 the IBR, it is only part of the story, because it is always relative.
-The asymptode or more generally the slope at any point along the IBR
-curve relates to sample completeness. This is different from sample size
-because it depends on the species pool of the community that you are
-sampling. For example consider a forest that has a total of 500 species
-and for the sake of this exercise let’s assume that all of them are
-equally common. Now, we take a random sample of 500 trees. It is highly
-ulikely that all 500 species will be captured by this sample. A very
-large fraction of the speciess pool will be missing from the sample. In
-other words: In this first forest, the sample size of 500 correponds to
-a *low sample completeness* and is *far away from the asymtote. Now,
-imagine a second forest that has has way fewer species, lets say 100.
-Again, we take a sample size of 500 trees. This his time we can
-probabably expect that a good proportion of the species in this forest
-will be sampled, probably not all of them, but surely a much bigger
-fraction than in the fist forest. In other words: In this second forest,
-the sample size of 500 correponds to a *high sample completeness\* and
-is *relatively close to the asyptote*.
+The asymptote or more generally the slope at any point along the IBR
+curve relates to something called *sample completeness*. This differs
+from sample size because in that it depends on the species pool of the
+community that you are sampling. For example consider a forest that has
+a total of 500 species and for the sake of this exercise let’s assume
+that all of them are equally common. Now, we take a random sample of 500
+trees. It is highly unlikely that all 500 species will be captured by
+this sample. A very large fraction of the species pool will be missing,
+while others will pop up multiple times. In other words: In this first
+forest with a large species pool, the sample size of 500 corresponds to
+a *low sample completeness* and is *relatively far away from the
+asymtote* of the IBR curve. Now, imagine a second forest that has way
+fewer species, lets say 100. Again, we take a sample of 500 trees. This
+time we can probably expect that a good proportion of the species in
+this forest will be sampled, probably not all of them, but surely a much
+bigger fraction than in the fist forest. In other words: In this second
+forest with a smaller species pool, the sample size of 500 corresponds
+to a *high sample completeness* and is *relatively close to the
+asyptote* .
+
+The figure below shows the IBR curves corresponding the large (A) and
+small (B) species pool of this example.
 
 <img src="man/figures/Figure2.jpg" width="80%" />
 
