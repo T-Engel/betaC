@@ -18,7 +18,7 @@ The r package and this repository have two main objectives:
     quantifies the non-random component in beta-diversity for a given
     sample completeness.
 
-2.  To to share the simulation code and results that we use in our
+2.  To share the simulation code and results that we use in our
     above-mentioned paper. You can find them in the folder
     [Simulations](https://github.com/T-Engel/betaC/tree/master/Simulations).
 
@@ -62,7 +62,7 @@ beta\_C, here is all you need to know:
     `?C_target` to see the documentation.
 
 If you’re unfamiliar with the method you might want to read the paper
-and take the longer walking tour that follows below.
+and take the long walking tour that follows below.
 
 ## Long walking tour of betaC
 
@@ -98,7 +98,7 @@ across species pools we allow the sample size to vary in order to keep a
 constant gamma-scale sample completeness instead, which is estimated
 using sample coverage (*C*).
 
-### Detour 1: Why to standardize alpha and gamma scale to the same sample size?
+## Detour 1: Why to standardize alpha and gamma scale to the same sample size?
 
 **Example 1: Beta-diversity of the BCI data set from vegan**
 
@@ -272,23 +272,27 @@ cannot be described by samplesize alone.
 
 **Sample size is always relative**
 
-While samplesize is surely related to the distance to the aysmptode of
+While sample size is surely related to the distance to the aysmptode of
 the IBR, it is only part of the story, because it is always relative.
 The asymptode or more generally the slope at any point along the IBR
 curve relates to sample completeness. This is different from sample size
 because it depends on the species pool of the community that you are
-sampling. For example consider a forest that has a total of 100 species
+sampling. For example consider a forest that has a total of 500 species
 and for the sake of this exercise let’s assume that all of them are
-equally common. Now, we take a random sample of 500 trees. It is pretty
-likely that most if not all species in this forest will be captured by
-our sample. In other words: In this first forest, the sample size of 500
-correponds to a *high sample completeness* and is *close to the
-asyptote*. Now, imagine a second forest that has has way more species,
-let’s say 500. Again, we take a sample size of 500 trees. This time our
-sample will be pretty far from complete because it highly unlikely that
-all 500 species will be represented in the sample. In other words: In
-this second forest, the sample size of 500 correponds to a *low sample
-completeness* and is *far away to the asyptote*.
+equally common. Now, we take a random sample of 500 trees. It is highly
+ulikely that all 500 species will be captured by this sample. A very
+large fraction of the speciess pool will be missing from the sample. In
+other words: In this first forest, the sample size of 500 correponds to
+a *low sample completeness* and is *far away from the asymtote. Now,
+imagine a second forest that has has way fewer species, lets say 100.
+Again, we take a sample size of 500 trees. This his time we can
+probabably expect that a good proportion of the species in this forest
+will be sampled, probably not all of them, but surely a much bigger
+fraction than in the fist forest. In other words: In this second forest,
+the sample size of 500 correponds to a *high sample completeness\* and
+is *relatively close to the asyptote*.
+
+<img src="man/figures/Figure2.jpg" width="80%" />
 
 ## Key references
 
