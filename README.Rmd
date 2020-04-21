@@ -15,11 +15,10 @@ library(knitr)
 ```
 # About betaC
 
-This r package "betaC" accompanies the following manuscript submitted to *Methods in Ecology and Evolution*:
+This r package "betaC" accompanies the following manuscript preprited on [biorxiv](https://biorxiv.org/cgi/content/short/2020.04.14.040402v1):
 
-**Engel T., Blowes, S. A. McGlinn, D. J., May, F., Gotelli, N. J, McGill, B. J., Chase, J. M. (2020). Resolving the species pool dependence of beta-diversity using coverage-based rarefaction.**
+**Engel T., Blowes, S. A. McGlinn, D. J., May, F., Gotelli, N. J, McGill, B. J., Chase, J. M. (2020). Resolving the species pool dependence of beta-diversity using coverage-based rarefaction. bioRxiv 2020.04.14.040402; doi: https://doi.org/10.1101/2020.04.14.040402**
 
-The manuscript will also be made available on biorxiv shortly.
 
 ## Objectives
 
@@ -104,6 +103,7 @@ abline(h = gamma_curve[N_alpha], col="grey", lty=3, lwd=2)
 legend("bottomright", legend = "gamma", col = 1, lty = 1,lwd = 2,bty = "n")
 
 ```
+
 This black curve is the gamma scale IBR curve. Typically, accumulation or rarefaction curves have this non-linear shape of a saturation curve. The grey vertical line marks the alpha scale sample size and the horizontal grey line is the rarefied richness of the gamma scale that corresponds to this sample size. It looks like about half of the species on the gamma scale have only been found because the gamma scale as way more individuals than the alpha scale. Let's look at the alpha scale to see how it compares.
 
 ```{r}
@@ -111,7 +111,7 @@ This black curve is the gamma scale IBR curve. Typically, accumulation or rarefa
 alphas_curves<-rarecurve(BCI)
 ```
 
-These are all the alpha scale rarefaction curves. We are usually interested in the average sample Therefore let's take the mean of these curves. Also, lets put them in the in the same graph as the gamma scale to see how they compare.
+These are all the alpha scale rarefaction curves. We are usually interested in the average sample Therefore let's take the mean of these curves. Also, let's put them in the in the same graph as the gamma scale to see how they compare.
 
 ```{r}
 N_min= min(rowSums(BCI))
@@ -133,9 +133,7 @@ beta_Sn_BCI<-beta_SN(BCI, N_min)
 beta_Sn_BCI
 ```
 
-The value is larger than 1, which indicates the spatial aggregation that we saw from looking at the IBR curves. However, it is much smaller than the traditional beta-diversity that was inflated due to the more-individuals effect. Instead of `r round(beta_BCI,2)` times as many species, now the gamma scale only has `r round(beta_Sn_BCI,2)` times as many individuals as the alpha scale when controlled for sample size. This is the true effect of spatial aggregation, conditional on the sample size of`r N_min`.
-
-#### 
+The value is larger than 1, which indicates the spatial aggregation that we saw from looking at the IBR curves. However, it is much smaller than the traditional beta-diversity that was inflated due to the more-individuals effect. Instead of `r round(beta_BCI,2)` times as many species, now the gamma scale only has `r round(beta_Sn_BCI,2)` times as many species as the alpha scale when controlled for sample size. This is the true effect of spatial aggregation, conditional on the sample size of`r N_min`.
 
 So, we saw that the deviation between alpha and gamma scale is due to non-random spatial structure in diversity. However, the magnitude of this gap depends on how far out along the IBR curve it is calculated. Let's use the same example from above but now, instead of calculating beta_Sn at for a sample size of `r N_min`, let's use a much smaller value of n=10.
 ```{r}
@@ -148,9 +146,11 @@ This estimate corresponds to a point of the IBR that is much further away from t
 ## Detour 2: Why to standardize beta-diversity by coverage?
 ### Sample size is always relative
 
-While sample size is surely related to the distance to the asymptote of the IBR, it is only part of the story, because it is always relative. The asymptote or more generally the slope at any point along the IBR curve relates to something called *sample completeness*. This differs from sample size because in that it depends on the species pool of the community that you are sampling.
+While sample size is surely related to the distance to the asymptote of the IBR, it is only part of the story, because it is always relative. The asymptote or more generally the slope at any point along the IBR curve relates to something called *sample completeness*. This differs from sample size in that it depends on the species pool of the community that you are sampling.
+
 For example consider a forest that has a total of 500 species and for the sake of this exercise let's assume that all of them are equally common. Now, we take a random sample of 500 trees. It is highly unlikely that all 500 species will be captured by this sample. A very large fraction of the species pool will be missing, while others will pop up multiple times. In other words: In this first forest with a large species pool, the sample size of 500 corresponds to a *low sample completeness* and is *relatively far away from the asymtote* of the IBR curve.
-Now, imagine a second forest that has way fewer species, lets say 100. Again, we take a sample of 500 trees. This time we can probably expect that a good proportion of the species in this forest will be sampled, probably not all of them, but surely a much bigger fraction than in the fist forest. In other words: In this second forest with a smaller species pool, the sample size of 500 corresponds to a *high sample completeness* and is *relatively close to the asyptote* .
+
+Now, imagine a second forest that has way fewer species, let's say 100. Again, we take a sample of 500 trees. This time we can probably expect that a good proportion of the species in this forest will be sampled, probably not all of them, but surely a much bigger fraction than in the fist forest. In other words: In this second forest with a smaller species pool, the sample size of 500 corresponds to a *high sample completeness* and is *relatively close to the asyptote* .
 
 The figure below shows the IBR curves corresponding the large (A) and small (B) species pool of this example.
 
