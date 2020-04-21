@@ -1,8 +1,8 @@
 
 # About betaC
 
-This r package “betaC” accompanies the following manuscript preprited on
-[biorxiv](https://biorxiv.org/cgi/content/short/2020.04.14.040402v1):
+This r package “betaC” accompanies the following manuscript preprinted
+on [biorxiv](https://biorxiv.org/cgi/content/short/2020.04.14.040402v1):
 
 **Engel T., Blowes, S. A. McGlinn, D. J., May, F., Gotelli, N. J,
 McGill, B. J., Chase, J. M. (2020). Resolving the species pool
