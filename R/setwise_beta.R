@@ -28,7 +28,7 @@ setwise_beta <- function(x,
 
 #' Calculate pairwise/ setwise beta diversities
 #'
-#' This function makes all pairwise/ setwise combinations of sites in the community matrix x and calculates pairwise/ setwise beta diversities,
+#' This function makes pairwise/ setwise combinations of sites in the community matrix x and calculates pairwise/ setwise beta diversities,
 #' respectively. "Set" refers to a user-defined number of samples that will be used. This is essentially
 #' the number of plots in a sample-based rarefaction. It's default is 2 (i.e. pairs).
 #'
@@ -40,11 +40,6 @@ setwise_beta <- function(x,
 #' value of max_combn. The function choose() "n over k" can be used to manually compute the number of possible subsets where
 #' n is the number of samples/rows in x and k is setsize. If summarise = T, mean and variance of all setwise
 #' comparisons are returned. Otherwise, the function returns all individual beta values.
-#'
-#' The default value for setsize is 2 which means that pairwise beta diversities are returned.
-#' Pairwise beta_Sn values are independent of the gamma_scale diversity and sampling effort.
-#' Therefore, they allow for meaningfull comparisons between groups with different numbers of
-#' samples (see Marion et al, 2017).
 #'
 #'
 #' @param x A site by species matrix.
