@@ -53,6 +53,7 @@ setwise_beta <- function(x,
 #' @import utils
 #'
 #' @return A data frame
+#' @export
 #'
 #'
 #' @examples

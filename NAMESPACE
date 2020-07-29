@@ -2,9 +2,11 @@
 
 export(C_target)
 export(Chat)
+export(D0.hat)
 export(beta_C)
 export(beta_C_curve)
 export(beta_SN)
+export(beta_stand)
 export(beta_true)
 export(calc_PIE)
 export(coverage)

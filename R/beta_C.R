@@ -140,6 +140,46 @@ invChat <- function (x, C)
   return(mm)
 }
 
+#' Rarefaction curve (inter- and extrapolation)
+#'
+#' Returns the expected number of species for a samplesize m. Interpolation and extrapolation is possible.
+#' This function was taken from the rPackage iNEXT (https://github.com/JohnsonHsieh/iNEXT).
+#'
+#' @param x integer vector of abundances
+#' @param m sample size. can be a vector
+#'
+#' @return numerical (vector)
+#' @export
+#'
+#' @examples
+D0.hat <- function(x, m) {
+  x <- x[x > 0]
+  n <- sum(x)
+  Sub <- function(m) {
+    if (m <= n) {
+      Fun <- function(x) {
+        if (x <= (n - m))
+          exp(lgamma(n - x + 1) + lgamma(n - m + 1) -
+                lgamma(n - x - m + 1) - lgamma(n + 1))
+        else 0
+      }
+      sum(1 - sapply(x, Fun))
+    }
+    else {
+      Sobs <- sum(x > 0)
+      f1 <- sum(x == 1)
+      f2 <- sum(x == 2)
+      f0.hat <- ifelse(f2 == 0, (n - 1)/n * f1 * (f1 - 1)/2, (n - 1)/n * f1^2/2/f2)
+      A <- n * f0.hat/(n * f0.hat + f1)
+      ifelse(f1 == 0, Sobs, Sobs + f0.hat * (1 - A^(m - n)))
+    }
+  }
+  sapply(m, Sub)
+}
+
+
+
+
 
 #' Calculate beta_C
 #'
@@ -148,6 +188,8 @@ invChat <- function (x, C)
 #'
 #' @param x a site by species matrix
 #' @param C target coverage. value between 0 and 1.
+#' @param extrapolation logical. should extrapolation be used?
+#' @param interrupt logical. SHould the function throw an error when C exceeds the maximum recommendable coverage?
 #'
 #' @return a numeric value
 #' @export
@@ -160,13 +202,23 @@ invChat <- function (x, C)
 #' # What is beta_C for a coverage value of 60%?
 #' beta_C(BCI, 0.6)
 #' }
-beta_C <- function(x, C) {
+beta_C <- function(x, C, extrapolation= T, interrupt=T) {
   x <- as.matrix(x)
   total <- colSums(x)
   N <- round(invChat(total, C))
+  C_max=C_target_extra(x, extrapolation=extrapolation)
+  if(C>C_max& interrupt==T){
+    if(extrapolation==F){
+      stop(paste0("Coverage exceeds the maximum possible value for interpolation (i.e. C_target = ",round(C_max,4),"). Use extrapolation or reduce the value of C.")
+      )
+    }else{
+      stop(paste0("Coverage exceeds the maximum possible value recommendable for extrapolation (i.e. C_target = ",round(C_max,4),"). Reduce the value of C.")
+      )
+    }
+  }
   if(N>1){
-    gamma_value = as.numeric(vegan::rarefy(total, N))
-    alpha_value = mean(vegan::rarefy(x, N))
+    gamma_value = D0.hat(total, N)
+    alpha_value = mean(apply(x,1, D0.hat, m=N))
     beta = gamma_value / alpha_value
   } else {
     beta = NA
@@ -179,8 +231,12 @@ beta_C <- function(x, C) {
 
 #' Calculate the recommended maximum coverage value for the computation of beta_C from a site by species matrix
 #'
-#' This returns the coverage of x at the gamma scale that corresponds to the smalles observed sample size at the alpha scale.
+#' This returns the coverage of x at the gamma scale that corresponds to the smalles observed sample size at the alpha scale times an extrapolation factor.
+#' The default (factor = 2) allows for extrapolation up to 2 times the observed sample size of the smallest alpha sample. For factor= 1, only interpolation is applied.
+#' its not recommendable to use factors largers than 2.
+#'
 #' @param x a site by specie matrix
+#' @param factor numeric. how far
 #'
 #' @return numeric value
 #' @export
@@ -193,12 +249,15 @@ beta_C <- function(x, C) {
 #' # What is the largest possible C that I can use to calculate beta_C for my site by species matrix?
 #' C_target(BCI)
 #' }
-C_target <- function(x) {
+#'
+
+C_target<- function(x, factor=2) {
   x <- as.matrix(x)
-  n = min(rowSums(x))
+  n = min(factor*rowSums(x))
   out <- Chat(colSums(x), n)
   return(out)
 }
+
 
 #' Calculate beta_Sn
 #'

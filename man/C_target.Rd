@@ -4,7 +4,7 @@
 \alias{C_target}
 \title{Calculate the recommended maximum coverage value for the computation of beta_C from a site by species matrix}
 \usage{
-C_target(x)
+C_target(x, factor = 2)
 }
 \arguments{
 \item{x}{a site by specie matrix}
@@ -23,4 +23,5 @@ data(BCI)
 # What is the largest possible C that I can use to calculate beta_C for my site by species matrix?
 C_target(BCI)
 }
+
 }

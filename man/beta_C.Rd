@@ -4,7 +4,7 @@
 \alias{beta_C}
 \title{Calculate beta_C}
 \usage{
-beta_C(x, C)
+beta_C(x, C, extrapolation = T, interrupt = T)
 }
 \arguments{
 \item{x}{a site by species matrix}
