@@ -7,7 +7,7 @@
 #' @param m sample size. can be a vector
 #'
 #' @return
-#' @export numerical (vector)
+#' @export
 #'
 #' @examples
 D0.hat <- function(x, m) {
