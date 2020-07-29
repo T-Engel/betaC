@@ -36,7 +36,11 @@ dat<-dat %>% mutate(beta_CC= future_map_dbl(alpha_samples, beta_C, C=C, .progres
 
 dat<- dat %>% mutate(motherpoints_common= as.factor(motherpoints_common))
 
-beta_C_plot<-dat %>% ggplot( aes(s_pool,beta_CC, group= motherpoints_common, col= motherpoints_common)) + geom_smooth()
+beta_C_plot<-dat %>% ggplot( aes(s_pool,beta_CC, group= motherpoints_common, col= motherpoints_common)) + geom_smooth()+
+    labs(title= paste0("C = ", round(C, 3)))+ theme(legend.position = "none")
+
+
+
 
 
 ##################
@@ -149,3 +153,51 @@ r1<-plot_grid(aggr_plot,rand_plot, labels = c("A", "B"))
 fig4_new<-plot_grid(r1, bottom_row, ncol = 1, labels= c("", "C"))
 
 ggsave("Simulations/Figure4.jpg",fig4_new, width = 21, height = 21, units="cm")
+
+##
+# Supplementary material
+
+
+# beta_C_extra
+
+# factors
+factor= c(1,2,3,4,5,10,20, 100)
+
+plotlist=list()
+C_targ= numeric()
+results=dat %>% select(s_pool, motherpoints_common)
+
+for(i in 1:length(factor)){
+    C_targ[i] <- min(future_map_dbl(dat$alpha_samples, C_target,factor=factor[i], .progress= T))
+    results[,(i+2)]<-future_map_dbl(dat$alpha_samples, beta_C, C=C_targ[i],interrupt=F, .progress=T)
+}
+colnames(results)[3:(length(factor)+2)]= paste0(
+    "C_target = ", round(C_targ,3),", Factor: ", factor
+)
+
+factor_plot<-results %>%
+    pivot_longer(-c(s_pool, motherpoints_common),names_to = "Factor",values_to = "beta_C") %>%
+    ggplot( aes(s_pool,beta_C, group= motherpoints_common, col= motherpoints_common))+
+    geom_smooth()+
+    scale_colour_viridis_d(name  ="intraspecific aggregation\n(# conspecific clusters)",
+                           breaks=as.factor(c(1,4,10,20, 4000)),
+                           labels=c("1 cluster", "4 clusters", "10 clusters", "20 clusters", "random")) +
+    facet_wrap(~Factor,ncol = 2)+
+    theme(legend.position = "bottom")
+
+
+ggsave("Simulations/Supplement.jpg", factor_plot, width = 21, height = 27, units="cm")
+
+# beta asymptotic
+
+
+C_asymptotic=0.999999
+
+dat<-dat %>% mutate(beta_CC_asymptotic= future_map_dbl(alpha_samples, beta_C_extra, C=C_asymptotic,interrupt=F, .progress=T))
+
+
+beta_C_asymptotic_plot<-dat %>% ggplot( aes(s_pool,beta_CC_asymptotic, group= motherpoints_common, col= motherpoints_common)) + geom_smooth()+
+    labs(title= "Asymptotic")+theme(legend.position = "none")
+
+plot_grid(beta_C_plot, beta_C_extra_plot, beta_C_asymptotic_plot, nrow = 1)
+
