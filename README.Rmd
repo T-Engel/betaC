@@ -43,7 +43,7 @@ install.packages("vegan")
 
 Furthermore, "tidyverse" is recommended but the main functions will work without it.
 
-## Short summary of the method
+## Short summary
 
 betaC is a beta-diversity index that measures intraspecific spatial aggregation or species turnover in space independently of the size of the regional species pool. This is important because most beta-diversity metrics don't only respond to the spatial structure of species diversity in an area but also to the total number of species occurring there. So, high beta-diversity can mean that there is a strong spatial clumping of species and/or that there is just a high gamma diversity. People have tried to disentangle these effects with mixed results.
 

@@ -10,6 +10,10 @@ beta_C(x, C, extrapolation = T, interrupt = T)
 \item{x}{a site by species matrix}
 
 \item{C}{target coverage. value between 0 and 1.}
+
+\item{extrapolation}{logical. should extrapolation be used?}
+
+\item{interrupt}{logical. SHould the function throw an error when C exceeds the maximum recommendable coverage?}
 }
 \value{
 a numeric value

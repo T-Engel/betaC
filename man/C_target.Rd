@@ -8,12 +8,16 @@ C_target(x, factor = 2)
 }
 \arguments{
 \item{x}{a site by specie matrix}
+
+\item{factor}{numeric. how far}
 }
 \value{
 numeric value
 }
 \description{
-This returns the coverage of x at the gamma scale that corresponds to the smalles observed sample size at the alpha scale.
+This returns the coverage of x at the gamma scale that corresponds to the smalles observed sample size at the alpha scale times an extrapolation factor.
+The default (factor = 2) allows for extrapolation up to 2 times the observed sample size of the smallest alpha sample. For factor= 1, only interpolation is applied.
+its not recommendable to use factors largers than 2.
 }
 \examples{
 \donttest{

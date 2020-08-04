@@ -39,7 +39,7 @@ install.packages("vegan")
 Furthermore, “tidyverse” is recommended but the main functions will work
 without it.
 
-## Short summary of the method
+## Short summary
 
 betaC is a beta-diversity index that measures intraspecific spatial
 aggregation or species turnover in space independently of the size of

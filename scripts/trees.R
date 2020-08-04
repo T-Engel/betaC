@@ -9,8 +9,8 @@ theme_set(theme_cowplot())
 # gentry dataset
 library(BIEN)
 #gentry<-BIEN_plot_dataset("Gentry Transect Dataset", all.metadata = T,only.new.world = T, all.taxonomy = T)
-#saveRDS(gentry, "data/gentry.rds")
-gentry<-readRDS("data/gentry.rds")
+#saveRDS(gentry, "datasets/gentry.rds")
+gentry<-readRDS("datasets/gentry.rds")
 
 # Exclude occurences without individual counts
 gentry<-subset(gentry, !is.na(individual_count))
@@ -117,7 +117,7 @@ first_row=plot_grid(
 ######################################################
 ## Second case study
 # HF dataset
-HF<-read.csv("data/HF253-03-trees-2014.csv")
+HF<-read.csv("datasets/HF253-03-trees-2014.csv")
 
 HF<-HF %>% filter(dbh>=10, census.id==1) %>% #dbh filter
     mutate(ha_plot= round(quadrat/100)) #
@@ -182,7 +182,7 @@ second_row=plot_grid(
 
 # combine
 fig_5<-plot_grid(first_row , second_row, nrow = 2)
-ggsave("data/Figure5.jpg", fig_5, width = 21, height = 21, units="cm")
+ggsave("datasets/Figure5.jpg", fig_5, width = 21, height = 21, units="cm")
 
 
 
