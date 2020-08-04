@@ -21,6 +21,6 @@ Calculate beta_Sn
 \donttest{
 library(vegan)
 data(BCI)
-beta_Sn(BCI, 50)
+beta_SN(BCI, 50)
 }
 }

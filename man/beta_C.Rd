@@ -28,6 +28,6 @@ library(vegan)
 data(BCI)
 
 # What is beta_C for a coverage value of 60\%?
-beta_C(BCI, 0.6)
+beta_C(BCI,C = 0.6)
 }
 }

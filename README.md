@@ -99,9 +99,6 @@ beta\_C, here is all you need to know:
     output of all the communities. Type `?C_target` to see the
     documentation.
 
-If you’re unfamiliar with the method you might want to read the paper
-and take a look at the vignette.
-
 <!-- badges: start -->
 
 [![Travis build

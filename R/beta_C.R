@@ -200,7 +200,7 @@ D0.hat <- function(x, m) {
 #' data(BCI)
 #'
 #' # What is beta_C for a coverage value of 60%?
-#' beta_C(BCI, 0.6)
+#' beta_C(BCI,C = 0.6)
 #' }
 beta_C <- function(x, C, extrapolation= T, interrupt=T) {
   x <- as.matrix(x)
@@ -271,7 +271,7 @@ C_target<- function(x, factor=2) {
 #' \donttest{
 #' library(vegan)
 #' data(BCI)
-#' beta_Sn(BCI, 50)
+#' beta_SN(BCI, 50)
 #' }
 beta_SN<-function(x, N){
   x<-as.matrix(x)
