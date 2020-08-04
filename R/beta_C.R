@@ -317,36 +317,6 @@ beta_true= function(x, transformation= F){
 }
 
 
-#' Calculate beta_C/ beta_Sn curve
-#'
-#' @param x a site by species matrix
-#'
-#' @return a tibble
-#' @export
-#' @import tibble
-#'
-#' @examples
-#' \donttest{
-#' library(vegan)
-#' data(BCI)
-#' beta_dat<-beta_C_curve(BCI)
-#' }
-#'
-beta_C_curve<-function(x){
-  requireNamespace("tibble")
-  if(length(dim(x))!=2) stop("x should be a site by species matrix.")
-  x= as.matrix(x)
-
-
-  dat=tibble(N=1:min(rowSums(x)),
-              C=map_dbl(N,function(N) Chat(colSums(x), N)),
-              beta_Sn = map_dbl(N,function(N)beta_SN(x, N)))
-
-
-  return(dat)
-}
-
-
 #' Calculate PIE and Effective number of species (S_PIE)
 #'
 #' This function was copied from  the package \href{https://github.com/MoBiodiv/mobr/}{mobr}.
