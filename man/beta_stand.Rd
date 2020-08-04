@@ -55,7 +55,7 @@ comparisons are returned. Otherwise, the function returns all individual beta va
 library(vegan)
 data(BCI)
 beta_pairwise<-
-beta_stand(BCI, func = list(beta_true, beta_SN, beta_C), setsize=2,
+beta_stand(BCI, func = list("beta_true", "beta_SN", "beta_C"), setsize=2,
 args = list(N=150, C=0.5))
 }
 
