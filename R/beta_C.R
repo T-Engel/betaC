@@ -206,7 +206,7 @@ beta_C <- function(x, C, extrapolation= T, interrupt=T) {
   x <- as.matrix(x)
   total <- colSums(x)
   N <- round(invChat(total, C))
-  C_max=C_target_extra(x, extrapolation=extrapolation)
+  C_max=C_target(x, factor=ifelse(extrapolation,2,1))
   if(C>C_max& interrupt==T){
     if(extrapolation==F){
       stop(paste0("Coverage exceeds the maximum possible value for interpolation (i.e. C_target = ",round(C_max,4),"). Use extrapolation or reduce the value of C.")
