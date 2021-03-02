@@ -279,8 +279,8 @@ beta_SN<-function(x, N){
   C= Chat(total,N)
 
   if(N>1){
-    gamma_value = as.numeric(vegan::rarefy(total, N))
-    alpha_value = mean(vegan::rarefy(x, N))
+    gamma_value = as.numeric(D0.hat(total, N))
+    alpha_value = mean(apply(x, 1, D0.hat, m=N))
     beta = gamma_value / alpha_value
   } else {
     beta = NA
