@@ -81,7 +81,7 @@ Chat <- function (x, m)
 #' Number of individuals corresponding to a desired coverage (inverse C_hat)
 #'
 #' If you wanted to resample a vector to a certain expected sample coverage, how many individuals would you have to draw?
-#' This is C_hat solved for the number of individuals. This code is a modification INEXT's internal function invChat.Ind() (Hsieh et al 2016).
+#' This is C_hat solved for the number of individuals. This code is a modification of INEXT's internal function invChat.Ind() (Hsieh et al 2016).
 #'
 #' @param x integer vector.
 #' @param C numeric. between 0 and 1
@@ -143,8 +143,7 @@ invChat <- function (x, C)
 #' Rarefaction curve (inter- and extrapolation)
 #'
 #' Returns the expected number of species for a samplesize m. Interpolation and extrapolation is possible.
-#' This function was taken from the rPackage iNEXT (https://github.com/JohnsonHsieh/iNEXT).
-#'
+#' This code was copied from the rPackage iNEXT (Hsieh et al 2016)
 #' @param x integer vector of abundances
 #' @param m sample size. can be a vector
 #'
@@ -183,8 +182,8 @@ D0.hat <- function(x, m) {
 
 #' Calculate beta_C
 #'
-#' Beta_C uses coverage-based rarefaction to quantify the non-random component in beta-diversity.
-#' The partitioning is done at the number of individuals that corresponds to a sample coverage of C at the gamma scale.
+#' Beta_C uses coverage-based rarefaction to standardize beta-diversity.
+
 #'
 #' @param x a site by species matrix
 #' @param C target coverage. value between 0 and 1.
