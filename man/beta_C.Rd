@@ -19,8 +19,7 @@ beta_C(x, C, extrapolation = T, interrupt = T)
 a numeric value
 }
 \description{
-Beta_C uses coverage-based rarefaction to quantify the non-random component in beta-diversity.
-The partitioning is done at the number of individuals that corresponds to a sample coverage of C at the gamma scale.
+Beta_C uses coverage-based rarefaction to standardize beta-diversity.
 }
 \examples{
 \donttest{

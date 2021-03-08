@@ -24,7 +24,7 @@ This r package "betaC" accompanies the following manuscript preprinted on [biorx
 
 The r package and this repository have two main objectives:
 
-1. To provide easy tools for the calculation of beta_C, a metric that quantifies the non-random component in beta-diversity for a given sample completeness.
+1. To provide easy tools for the calculation of beta_C, a metric that standardizes beta-diversity for a given sample completeness.
 
 2. To share the simulation code and results that we use in our above-mentioned paper. You can find them in the folder [Simulations](https://github.com/T-Engel/betaC/tree/master/Simulations).
 
@@ -45,9 +45,9 @@ Furthermore, "tidyverse" is recommended but the main functions will work without
 
 ## Short summary
 
-betaC is a beta-diversity index that measures intraspecific spatial aggregation or species turnover in space independently of the size of the regional species pool. This is important because most beta-diversity metrics don't only respond to the spatial structure of species diversity in an area but also to the total number of species occurring there. So, high beta-diversity can mean that there is a strong spatial clumping of species and/or that there is just a high gamma diversity. People have tried to disentangle these effects with mixed results.
+beta_C is a beta-diversity index that measures intraspecific spatial aggregation or species turnover in space independently of the size of the regional species pool. This is important because most beta-diversity metrics don't only respond to the spatial structure of species diversity in an area but also to the total number of species occurring there. So, high beta-diversity can mean that there is a strong spatial clumping of species and/or that there is just a high gamma diversity. People have tried to disentangle these effects with mixed results.
 
-In our paper we make the argument that the species-pool dependence of beta-diversity is linked sampling effects. Sampling effects arises because alpha and gamma scale diversity estimates are by definition based on very different sample sizes (i.e.,  numbers of individuals captured by a sample). This means that a major part of beta diversity is usually due to a more-individuals effect between alpha and gamma scales and not due to spatial structure. The strength of this sampling effect is stronger in large species pools where sampling curves are typically very steep (i.e. there is a larger jump from alpha to gamma). The steepness of sampling curves is related to sample completeness. We find that by standardizing beta-diversity by sample completeness, we remove the sampling effect and the resulting metric, betaC only responds to spatial aggregation.
+In our paper we make the argument that the species-pool dependence of beta-diversity is linked to sampling effects. Sampling effects arises because alpha and gamma scale diversity estimates are by definition based on very different sample sizes (i.e.,  numbers of individuals captured by a sample). This means that a major part of beta diversity is usually due to a more-individuals effect between alpha and gamma scales and not due to spatial structure. The strength of this sampling effect is stronger in large species pools where sampling curves are typically very steep (i.e. there is a larger jump from alpha to gamma). The steepness of sampling curves is related to sample completeness. We find that by standardizing beta-diversity by sample completeness, we remove the sampling effect and the resulting metric, betaC only responds to spatial aggregation.
 
 To achieve this, we use a combination of individual-based and coverage-based rarefaction (coverage is a measure of sample completeness). The main idea of our approach is that within a species pool alpha and gamma scale diversity estimates are standardized to a common number of individuals, while across species pools we allow the sample size to vary in order to keep a constant gamma-scale sample sample coverage (*C*) instead.
 

@@ -16,7 +16,7 @@ a numeric value
 }
 \description{
 If you wanted to resample a vector to a certain expected sample coverage, how many individuals would you have to draw?
-This is C_hat solved for the number of individuals. This code is a modification INEXT's internal function invChat.Ind() (Hsieh et al 2016).
+This is C_hat solved for the number of individuals. This code is a modification of INEXT's internal function invChat.Ind() (Hsieh et al 2016).
 }
 \examples{
 \donttest{

@@ -14,8 +14,7 @@ dependence of beta-diversity using coverage-based rarefaction. bioRxiv
 The r package and this repository have two main objectives:
 
 1.  To provide easy tools for the calculation of beta\_C, a metric that
-    quantifies the non-random component in beta-diversity for a given
-    sample completeness.
+    standardizes beta-diversity for a given sample completeness.
 
 2.  To share the simulation code and results that we use in our
     above-mentioned paper. You can find them in the folder
@@ -41,7 +40,7 @@ without it.
 
 ## Short summary
 
-betaC is a beta-diversity index that measures intraspecific spatial
+beta\_C is a beta-diversity index that measures intraspecific spatial
 aggregation or species turnover in space independently of the size of
 the regional species pool. This is important because most beta-diversity
 metrics don’t only respond to the spatial structure of species diversity
@@ -51,7 +50,7 @@ species and/or that there is just a high gamma diversity. People have
 tried to disentangle these effects with mixed results.
 
 In our paper we make the argument that the species-pool dependence of
-beta-diversity is linked sampling effects. Sampling effects arises
+beta-diversity is linked to sampling effects. Sampling effects arises
 because alpha and gamma scale diversity estimates are by definition
 based on very different sample sizes (i.e., numbers of individuals
 captured by a sample). This means that a major part of beta diversity is

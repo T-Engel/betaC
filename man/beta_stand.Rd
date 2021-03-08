@@ -41,11 +41,11 @@ respectively. "Set" refers to a user-defined number of samples that will be used
 the number of plots in a sample-based rarefaction. It's default is 2 (i.e. pairs).
 }
 \details{
-The calulation of the beta-diversity metric is done according to the function in "func". This should be a function that returns a
-(dis-)similarity or beta diversity metric for a site-by species matrix like x. "func" is applied to every subset. Addidtional arguments will be passed on to "func".
+The calculation of the beta-diversity metric is done according to the function in "func". This should be a function that returns a
+(dis-)similarity or beta diversity metric for a site-by species matrix like x. "func" is applied to every subset. Additional arguments will be passed on to "func".
 
 If the number of possible sets/ pairwise comparisons exceeds the value of max_combn. A random subsample of all combinations will
-be drawn. The number of random samples can be adjusted using the argument resamples. It is not recommended increase the
+be drawn. The number of random samples can be adjusted using the argument resamples. It is not recommended to increase the
 value of max_combn. The function choose() "n over k" can be used to manually compute the number of possible subsets where
 n is the number of samples/rows in x and k is setsize. If summarise = T, mean and variance of all setwise
 comparisons are returned. Otherwise, the function returns all individual beta values.
@@ -55,8 +55,8 @@ comparisons are returned. Otherwise, the function returns all individual beta va
 library(vegan)
 data(BCI)
 beta_pairwise<-
-beta_stand(BCI, func = list("beta_true", "beta_SN", "beta_C"), setsize=2,
-args = list(N=150, C=0.5))
+beta_stand(BCI, func = list( "beta_C"), setsize=2,
+args = list(C=0.5))
 }
 
 }

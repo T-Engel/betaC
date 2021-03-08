@@ -16,5 +16,5 @@ numerical (vector)
 }
 \description{
 Returns the expected number of species for a samplesize m. Interpolation and extrapolation is possible.
-This function was taken from the rPackage iNEXT (https://github.com/JohnsonHsieh/iNEXT).
+This code was copied from the rPackage iNEXT (Hsieh et al 2016)
 }
