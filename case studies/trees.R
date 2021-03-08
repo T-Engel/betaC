@@ -126,7 +126,7 @@ HF_m<-HF %>% group_by(ha_plot, sp) %>% summarise(count=n()) %>%
     pivot_wider(names_from = sp, values_from = count, values_fill =list(count=0) ) %>%
     column_to_rownames("ha_plot") %>% as.matrix()
 
-#BCI dataset (fromn vegan package)
+#BCI dataset (through vegan package)
 data(BCI)
 BCI_m<-BCI[1:35,] %>% as.matrix()
 
@@ -182,7 +182,7 @@ second_row=plot_grid(
 
 # combine
 fig_5<-plot_grid(first_row , second_row, nrow = 2)
-ggsave("datasets/Figure5.jpg", fig_5, width = 21, height = 21, units="cm")
+ggsave("case studies/Figure5.jpg", fig_5, width = 21, height = 21, units="cm")
 
 
 
