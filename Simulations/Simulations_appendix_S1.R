@@ -229,7 +229,7 @@ bottom_row <-  ggplot()+
     theme_cowplot(12)+
     theme(legend.position = "bottom")
 
-save_plot("Simulations/supplement/figureS3.jpg", plot = bottom_row,base_asp = 1,
+save_plot("Simulations/FigureS1.jpg", plot = bottom_row,base_asp = 1,
           ncol = 3)
 
 
