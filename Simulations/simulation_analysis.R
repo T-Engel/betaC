@@ -164,7 +164,9 @@ r1<-plot_grid(aggr_plot,rand_plot, labels = c("A", "B"))
 
 fig4_new<-plot_grid(r1, bottom_row, ncol = 1, labels= c("", "C"))
 
-ggsave("Simulations/Figure4.jpg",fig4_new, width = 21, height = 21, units="cm")
+
+
+ggsave("Figures/Figure4.pdf",fig4_new, width = 15.6, height = 15.6, units="cm")
 
 
 

@@ -110,7 +110,7 @@ first_row=plot_grid(
     title, gentry_plot,
     ncol = 1,
     # rel_heights values control vertical title margins
-    rel_heights = c(0.1, 1)
+    rel_heights = c(0.15, 1)
 )
 
 
@@ -177,12 +177,12 @@ second_row=plot_grid(
     title2, HF_BCI,
     ncol = 1,
     # rel_heights values control vertical title margins
-    rel_heights = c(0.1, 1)
+    rel_heights = c(0.15, 1)
 )
 
 # combine
 fig_5<-plot_grid(first_row , second_row, nrow = 2)
-ggsave("case studies/Figure5.jpg", fig_5, width = 21, height = 21, units="cm")
+ggsave("Figures/Figure5.pdf", fig_5, width = 15.6, height = 15.6, units="cm")
 
 
 

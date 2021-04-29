@@ -134,8 +134,8 @@ theme_set(theme_cowplot())
 mytheme= theme(legend.position = "none",
                axis.text=element_text(size=8),
                axis.title=element_text(size=10),
-               plot.title = element_text(size=10,face = "bold"))
-
+               plot.title = element_text(size=8,face = "bold"))
+text_size= 8*5/ 14
 
 #########################################################################
 
@@ -146,14 +146,16 @@ pal2<-viridisLite::magma(5)[c(1,4)]
 base = as.integer(sim_sad(s_pool = 450, n_sim = 1000, sad_coef = list(cv_abund =2)) )
 base_m = splitgamma(base, type = "on_curve",iter =300 )
 base_curve <- rarefy_long(base_m)
+base_curve <-base_curve %>%  mutate(Curve = relevel(Curve, "gamma"))
+
 base_plot <-
-    base_curve %>% filter(type == "major") %>% ggplot(aes(N, S_n, col = Curve)) +
+    base_curve %>% filter(type == "major") %>% ggplot() +
     geom_abline(intercept = specnumber(base), slope = 0, linetype=5, col=pal2[1])+
     geom_abline(intercept = mean(specnumber(base_m)), slope = 0, linetype=5, col=pal2[2])+
     geom_vline(xintercept = 250, linetype= "dashed", color ="grey")+
-    geom_line(size = 1) +
-    geom_text(aes(x= 1000, y= 55),col=1, label=paste0("beta == ", round(specnumber(base)/mean(specnumber(base_m)),2)), nudge_y = -30,parse = T ,hjust="right",vjust="center")+
-    geom_text(aes(x= 600, y= 55),col=1, label="beta[S[n]] == 1", nudge_y = -30,parse = T ,hjust="right", vjust="center")+
+    geom_line(aes(N, S_n, col = Curve),size = 1) +
+    annotate("text", size= text_size, x= 1000, y= 25,col=1, label=paste0("beta == ", round(specnumber(base)/mean(specnumber(base_m)),2)),parse = T ,hjust="right",vjust="center")+
+    annotate("text", size= text_size,x= 600, y= 25,col=1, label="beta[S[n]] == 1", nudge_y = -30,parse = T ,hjust="right", vjust="center")+
 
     coord_cartesian(xlim = c(0, 1050), ylim = c(0, 300),expand = F)+
     labs(title = "reference", x= "Individuals", y= "Rarefied richness")+
@@ -163,6 +165,7 @@ base_plot <-
 individuals = splitgamma(base, type = "on_curve", iter = 300,n = 500)[1, ]
 individuals_m = splitgamma(individuals, type = "on_curve", iter = 200)
 individuals_curve <- rarefy_long(individuals_m)
+individuals_curve <-individuals_curve %>%  mutate(Curve = relevel(Curve, "gamma"))
 individuals_plot <-
     individuals_curve %>% filter(type == "major")  %>% ggplot(aes(N, S_n, col = Curve)) +
     geom_abline(intercept = specnumber(individuals), slope = 0, linetype=5, col=pal2[1])+
@@ -170,8 +173,8 @@ individuals_plot <-
     geom_vline(xintercept = 250, linetype= "dashed", color ="grey")+
     geom_line(data=base_curve %>% filter(type=="major", Curve=="gamma"), linetype= "dotted", size=1, col= "grey")  +
     geom_line(size = 1) +
-    geom_text(aes(x= 1000, y= 55),col=1, label=paste0("beta == ", round(specnumber(individuals)/mean(specnumber(individuals_m)),2)), nudge_y = -30,parse = T ,hjust="right", vjust="center")+
-    geom_text(aes(x= 600, y= 55),col=1, label="beta[S[n]] == 1", nudge_y = -30,parse = T ,hjust="right",vjust="center")+
+    annotate("text", size= text_size,x= 1000, y= 25,col=1, label=paste0("beta == ", round(specnumber(individuals)/mean(specnumber(individuals_m)),2)), nudge_y = -30,parse = T ,hjust="right", vjust="center")+
+    annotate("text", size= text_size,x= 600, y= 25,col=1, label="beta[S[n]] == 1", nudge_y = -30,parse = T ,hjust="right",vjust="center")+
     coord_cartesian(xlim = c(0, 1050), ylim = c(0, 300),expand = F) +
     labs(title = "fewer individuals", x= "Individuals", y= "Rarefied richness")+
     mytheme + scale_color_manual(values = pal2)
@@ -180,14 +183,17 @@ individuals_plot <-
 pool =   as.integer(sim_sad(s_pool = 80, n_sim = 1000, sad_coef = list(cv_abund = 2))  )# sim_ENS(30, 85, 1000)
 pool_m = splitgamma(pool, type = "on_curve")
 pool_curve <- rarefy_long(pool_m)
+
+pool_curve <-pool_curve %>%  mutate(Curve = relevel(Curve, "gamma"))
 pool_plot <-
     pool_curve %>% filter(type == "major") %>% ggplot(aes(N, S_n, col = Curve)) +
     geom_abline(intercept = specnumber(pool), slope = 0, linetype=5, col=pal2[1])+
     geom_abline(intercept = mean(specnumber(pool_m)), slope = 0, linetype=5, col=pal2[2])+
     geom_vline(xintercept = 250, linetype= "dashed", color ="grey")+
+    geom_line(data=base_curve %>% filter(type=="major", Curve=="gamma"), linetype= "dotted", size=1, col= "grey")  +
     geom_line(size = 1) +
-    geom_text(aes(x= 1000, y=55),col=1, label=paste0("beta == ", round(specnumber(pool)/mean(specnumber(pool_m)),2)), nudge_y = -30,parse = T ,hjust="right", vjust="center")+
-    geom_text(aes(x= 600, y= 55),col=1, label="beta[S[n]] == 1", nudge_y = -30,parse = T ,hjust="right", vjust="center")+
+    annotate("text", size= text_size,x= 1000, y=25,col=1, label=paste0("beta == ", round(specnumber(pool)/mean(specnumber(pool_m)),2)), nudge_y = -30,parse = T ,hjust="right", vjust="center")+
+    annotate("text", size= text_size,x= 600, y= 25,col=1, label="beta[S[n]] == 1", nudge_y = -30,parse = T ,hjust="right", vjust="center")+
     coord_cartesian(xlim = c(0, 1050), ylim = c(0, 300),expand = F) +
     labs(title = "smaller species pool", x= "Individuals", y= "Rarefied richness")+
     mytheme + scale_color_manual(values = pal2)
@@ -195,14 +201,16 @@ pool_plot <-
 # aggregation
 space_m = splitgamma(base, type = "distinct")
 space_curve <- rarefy_long(space_m)
+space_curve <-space_curve %>%  mutate(Curve = relevel(Curve, "gamma"))
+
 space_plot <-
     space_curve %>% filter(type == "major") %>% ggplot(aes(N, S_n, col = Curve)) +
     geom_abline(intercept = specnumber(base), slope = 0, linetype=5, col=pal2[1])+
     geom_abline(intercept = mean(rarefy(space_m, min(rowSums(space_m)))), slope = 0, linetype=5, col=pal2[2])+
     geom_vline(xintercept = 250, linetype= "dashed", color ="grey")+
     geom_line(size = 1) +
-    geom_text(aes(x= 1000, y= 55),col=1, label=paste0("beta == ", round(specnumber(base)/mean(specnumber(space_m)),2)), nudge_y = -30,parse = T ,hjust="right", vjust="center")+
-    geom_text(aes(x= 690, y= 55),col=1, label="beta[S[n]] == 1.38", nudge_y = -30,parse = T ,hjust="right",vjust="center")+
+    annotate("text", size= text_size,x= 1000, y= 25,col=1, label=paste0("beta == ", round(specnumber(base)/mean(specnumber(space_m)),2)), nudge_y = -30,parse = T ,hjust="right", vjust="center")+
+    annotate("text",size= text_size,x= 690, y= 25,col=1, label="beta[S[n]] == 1.38", nudge_y = -30,parse = T ,hjust="right",vjust="center")+
 
     labs(title = "intraspecific aggregation", x= "Individuals", y= "Rarefied richness")+
     coord_cartesian(xlim = c(0, 1050), ylim = c(0, 300),expand = F) +
@@ -220,6 +228,11 @@ Figure1 <- plot_grid(
     labels = c(NA, "A", NA, "B", "C", "D"),
     align= "hv"
 )
+
+pdf("Figures/Figure1a.pdf",width = 15.6*0.393701,height = 10.4*0.393701,useDingbats = F)
+Figure1
+dev.off()
+save_plot("Figures/Figure1.pdf",plot = Figure1, ncol = 3,nrow = 2,base_height =  5.2,base_asp = 1,  units="cm")
 ggsave("conceptual figures/Figure1.jpg",Figure1, width = 18, height = 12, units="cm")
 
 ########################################################################################################
@@ -266,7 +279,7 @@ small_plot_C <-
     geom_abline(slope = 1-cov_value, intercept = SnC_gamma - ((1-cov_value)*N_low), size=1, col= "darkgrey")+
     geom_line(aes(N, S_n, linetype = Curve), data= filter(space_curve,type == "major"), size = 1,col= pal[2]) +
     #geom_text(aes(x= N_low, y= 0), label=paste0("n = ", round(N_low,2)),nudge_x = 20, nudge_y = 10,parse = F ,hjust="left")+
-    geom_text(aes(x= 1000, y= SnC_alpha+4), label=paste0("beta[C] == ", round(beta_C_small,3)),nudge_x = , nudge_y = -25,parse = T ,hjust="right", vjust="bottom")+
+    geom_text(size= text_size,aes(x= 1000, y= SnC_alpha+4), label=paste0("beta[C] == ", round(beta_C_small,3)),nudge_x = , nudge_y = -25,parse = T ,hjust="right", vjust="bottom")+
     labs(title="Small species pool\n(100 spp.)", x= "Individuals", y= "Rarefied richness")+ #"small pool - beta\nstandardised by coverage\nof large pool"
     coord_cartesian(xlim = c(0, 1050), ylim = c(0, 300),expand = F) +
     mytheme + theme(plot.title = element_text(colour = pal[2]))
@@ -280,7 +293,7 @@ small_plot_N <-
     geom_line(aes(N, S_n, linetype = Curve), data= filter(space_curve,type == "major"), size = 1, col= pal[2]) +
     labs(title="Small species pool\n(100 spp.)", x= "Individuals", y= "Rarefied richness")+
     #geom_text(aes(x= N1,y= 0), label=paste0("n = ", round(N1,2)),nudge_x = 20, nudge_y = 10, parse = F, hjust="left" )+
-    geom_text(aes(x= 1000, y= alpha_Sn1), label=paste0("beta[s[n]] == ", round(gamma_Sn1/alpha_Sn1,3)),nudge_x = , nudge_y = -25,parse = T ,hjust="right", vjust="bottom")+
+    geom_text(size= text_size,aes(x= 1000, y= alpha_Sn1), label=paste0("beta[s[n]] == ", round(gamma_Sn1/alpha_Sn1,3)),nudge_x = , nudge_y = -25,parse = T ,hjust="right", vjust="bottom")+
 
     coord_cartesian(xlim = c(0, 1050), ylim = c(0, 300), expand = F) +
     mytheme + theme(plot.title = element_text(colour = pal[2]))
@@ -299,7 +312,7 @@ large_plot_N <-
 
     labs(title="Large species pool\n(500 spp.)", x= "Individuals", y= "Rarefied richness")+
     #geom_text(aes(x= N_low2,y= 0), label=paste0("n = ", round(N_low2,2)),nudge_x = 20, nudge_y = 10, parse = F, hjust="left" )+
-    geom_text(aes(x= 1000, y= alpha_Sn), label=paste0("beta[s[n]] == ", round(gamma_Sn/alpha_Sn,3)), nudge_y = -25,parse = T ,hjust="right", vjust="bottom")+
+    geom_text(size= text_size, aes(x= 1000, y= alpha_Sn), label=paste0("beta[s[n]] == ", round(gamma_Sn/alpha_Sn,3)), nudge_y = -25,parse = T ,hjust="right", vjust="bottom")+
     coord_cartesian(xlim = c(0, 1050), ylim = c(0, 300), expand = F) +
     mytheme + theme(plot.title = element_text(colour = pal[1]))
 
@@ -311,7 +324,7 @@ large_plot_C <-
     geom_abline(slope = 1-cov_value, intercept = gamma_Sn - ((1-cov_value)*N_low2), size=1, col= "darkgrey")+
     geom_line(aes(N, S_n, linetype = Curve), data= filter(space2_curve,type == "major"), size = 1, col= pal[1]) +
     labs(title="Large species pool\n(500 spp.)", x= "Individuals", y= "Rarefied richness")+
-    geom_text(aes(x= 1000, y= alpha_Sn), label=paste0("beta[C] == ", round(beta_C_large,3)), nudge_y = -25,parse = T ,hjust="right", vjust="bottom")+
+    geom_text(size= text_size,aes(x= 1000, y= alpha_Sn), label=paste0("beta[C] == ", round(beta_C_large,3)), nudge_y = -25,parse = T ,hjust="right", vjust="bottom")+
     coord_cartesian(xlim = c(0, 1050), ylim = c(0, 300), expand = F) +
     mytheme +
     theme(plot.title = element_text(colour = pal[1]))
@@ -353,5 +366,7 @@ Figure3<-plot_grid(large_plot_C,small_plot_C, C_plot, ncol = 3, labels = "AUTO")
 
 Figure2
 Figure3
+save_plot("Figures/Figure2.pdf",Figure2,ncol = 3,nrow = 1,base_height =  9,base_width = 5.2,  units="cm" )
+save_plot("Figures/Figure3.pdf",Figure3,ncol = 3,nrow = 1,base_height =  9,base_width = 5.2,  units="cm" )
 ggsave("conceptual figures/Figure2.jpg",Figure2, width = 18, height = 10, units="cm")
 ggsave("conceptual figures/Figure3.jpg",Figure3, width = 18, height = 10, units="cm")
