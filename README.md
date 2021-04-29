@@ -2,12 +2,13 @@
 # About betaC
 
 This r package “betaC” accompanies the following manuscript preprinted
-on [biorxiv](https://biorxiv.org/cgi/content/short/2020.04.14.040402v1):
+on
+[biorxiv](https://www.biorxiv.org/content/10.1101/2020.04.14.040402v2):
 
 **Engel T., Blowes, S. A. McGlinn, D. J., May, F., Gotelli, N. J,
-McGill, B. J., Chase, J. M. (2020). Resolving the species pool
-dependence of beta-diversity using coverage-based rarefaction. bioRxiv
-2020.04.14.040402; doi: <https://doi.org/10.1101/2020.04.14.040402>**
+McGill, B. J., Chase, J. M. (2020). Using coverage-based rarefaction to
+infer non-random species distributions. bioRxiv 2020.04.14.040402; doi:
+<https://doi.org/10.1101/2020.04.14.040402>**
 
 ## Objectives
 
@@ -60,7 +61,7 @@ is stronger in large species pools where sampling curves are typically
 very steep (i.e. there is a larger jump from alpha to gamma). The
 steepness of sampling curves is related to sample completeness. We find
 that by standardizing beta-diversity by sample completeness, we remove
-the sampling effect and the resulting metric, betaC only responds to
+the sampling effect and the resulting metric, beta\_C only responds to
 spatial aggregation.
 
 To achieve this, we use a combination of individual-based and
@@ -69,7 +70,7 @@ completeness). The main idea of our approach is that within a species
 pool alpha and gamma scale diversity estimates are standardized to a
 common number of individuals, while across species pools we allow the
 sample size to vary in order to keep a constant gamma-scale sample
-sample coverage (*C*) instead.
+sample coverage (*C\_target*) instead.
 
 ## Main functions of this package
 

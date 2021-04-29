@@ -15,9 +15,9 @@ library(knitr)
 ```
 # About betaC
 
-This r package "betaC" accompanies the following manuscript preprinted on [biorxiv](https://biorxiv.org/cgi/content/short/2020.04.14.040402v1):
+This r package "betaC" accompanies the following manuscript preprinted on [biorxiv](https://www.biorxiv.org/content/10.1101/2020.04.14.040402v2):
 
-**Engel T., Blowes, S. A. McGlinn, D. J., May, F., Gotelli, N. J, McGill, B. J., Chase, J. M. (2020). Resolving the species pool dependence of beta-diversity using coverage-based rarefaction. bioRxiv 2020.04.14.040402; doi: https://doi.org/10.1101/2020.04.14.040402**
+**Engel T., Blowes, S. A. McGlinn, D. J., May, F., Gotelli, N. J, McGill, B. J., Chase, J. M. (2020). Using coverage-based rarefaction to infer non-random species distributions. bioRxiv 2020.04.14.040402; doi: https://doi.org/10.1101/2020.04.14.040402**
 
 
 ## Objectives
@@ -47,9 +47,9 @@ Furthermore, "tidyverse" is recommended but the main functions will work without
 
 beta_C is a beta-diversity index that measures intraspecific spatial aggregation or species turnover in space independently of the size of the regional species pool. This is important because most beta-diversity metrics don't only respond to the spatial structure of species diversity in an area but also to the total number of species occurring there. So, high beta-diversity can mean that there is a strong spatial clumping of species and/or that there is just a high gamma diversity. People have tried to disentangle these effects with mixed results.
 
-In our paper we make the argument that the species-pool dependence of beta-diversity is linked to sampling effects. Sampling effects arises because alpha and gamma scale diversity estimates are by definition based on very different sample sizes (i.e.,  numbers of individuals captured by a sample). This means that a major part of beta diversity is usually due to a more-individuals effect between alpha and gamma scales and not due to spatial structure. The strength of this sampling effect is stronger in large species pools where sampling curves are typically very steep (i.e. there is a larger jump from alpha to gamma). The steepness of sampling curves is related to sample completeness. We find that by standardizing beta-diversity by sample completeness, we remove the sampling effect and the resulting metric, betaC only responds to spatial aggregation.
+In our paper we make the argument that the species-pool dependence of beta-diversity is linked to sampling effects. Sampling effects arises because alpha and gamma scale diversity estimates are by definition based on very different sample sizes (i.e.,  numbers of individuals captured by a sample). This means that a major part of beta diversity is usually due to a more-individuals effect between alpha and gamma scales and not due to spatial structure. The strength of this sampling effect is stronger in large species pools where sampling curves are typically very steep (i.e. there is a larger jump from alpha to gamma). The steepness of sampling curves is related to sample completeness. We find that by standardizing beta-diversity by sample completeness, we remove the sampling effect and the resulting metric, beta_C only responds to spatial aggregation.
 
-To achieve this, we use a combination of individual-based and coverage-based rarefaction (coverage is a measure of sample completeness). The main idea of our approach is that within a species pool alpha and gamma scale diversity estimates are standardized to a common number of individuals, while across species pools we allow the sample size to vary in order to keep a constant gamma-scale sample sample coverage (*C*) instead.
+To achieve this, we use a combination of individual-based and coverage-based rarefaction (coverage is a measure of sample completeness). The main idea of our approach is that within a species pool alpha and gamma scale diversity estimates are standardized to a common number of individuals, while across species pools we allow the sample size to vary in order to keep a constant gamma-scale sample sample coverage (*C_target*) instead.
 
 
 ## Main functions of this package
