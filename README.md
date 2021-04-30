@@ -1,4 +1,11 @@
 
+<!-- badges: start -->
+
+[![Travis build
+status](https://travis-ci.org/T-Engel/betaC.svg?branch=master)](https://travis-ci.org/T-Engel/betaC)
+[![DOI](https://zenodo.org/badge/207293936.svg)](https://zenodo.org/badge/latestdoi/207293936)
+<!-- badges: end -->
+
 # About betaC
 
 This r package “betaC” accompanies the following manuscript preprinted
@@ -98,9 +105,3 @@ beta\_C, here is all you need to know:
     `beta_C(x, C)`such that it corresponds to the smallest `C_target()`
     output of all the communities. Type `?C_target` to see the
     documentation.
-
-<!-- badges: start -->
-
-[![Travis build
-status](https://travis-ci.org/T-Engel/betaC.svg?branch=master)](https://travis-ci.org/T-Engel/betaC)
-<!-- badges: end -->

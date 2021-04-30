@@ -13,6 +13,11 @@ library(cowplot)
 library(tidyverse)
 library(knitr)
 ```
+<!-- badges: start -->
+  [![Travis build status](https://travis-ci.org/T-Engel/betaC.svg?branch=master)](https://travis-ci.org/T-Engel/betaC)
+  [![DOI](https://zenodo.org/badge/207293936.svg)](https://zenodo.org/badge/latestdoi/207293936)
+  <!-- badges: end -->
+  
 # About betaC
 
 This r package "betaC" accompanies the following manuscript preprinted on [biorxiv](https://www.biorxiv.org/content/10.1101/2020.04.14.040402v2):
@@ -60,6 +65,4 @@ If you've read the paper and you just want to have the code to calculate beta_C,
 * The other important function is `C_target(x)`. Its fits argument `x` is a site-by-species abundance matrix. It returns the maximum possible coverage value that can be used to calculate beta_C for the community matrix `x`. As a default it allows for extrapolation, i.e. it will extrapolate to a sample size that exceeds the smallest sample size by a factor 2. You can also adjust this extrapolation factor through the argument `factor`(e.g. `factor = 1` for interpolation only). However, we caution against values larger than 2. When comparing beta_C across multiple communities with changing species pools, it is recommended to choose the `C` argument  in `beta_C(x, C)`such that it corresponds to the smallest `C_target()` output of all the communities. Type `?C_target` to see the documentation.
 
 
-<!-- badges: start -->
-  [![Travis build status](https://travis-ci.org/T-Engel/betaC.svg?branch=master)](https://travis-ci.org/T-Engel/betaC)
-  <!-- badges: end -->
+
