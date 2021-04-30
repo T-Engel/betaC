@@ -3,6 +3,7 @@
 
 [![Travis build
 status](https://travis-ci.org/T-Engel/betaC.svg?branch=master)](https://travis-ci.org/T-Engel/betaC)
+
 [![DOI](https://zenodo.org/badge/207293936.svg)](https://zenodo.org/badge/latestdoi/207293936)
 <!-- badges: end -->
 
